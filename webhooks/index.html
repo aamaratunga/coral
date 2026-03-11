@@ -1,0 +1,1550 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../one-time-jobs/">
+      
+      
+        <link rel="next" href="../api/jobs/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+    
+    
+      
+        <title>Webhook Notifications - My Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#webhook-notifications" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="My Docs" class="md-header__button md-logo" aria-label="My Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            My Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Webhook Notifications
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="My Docs" class="md-nav__button md-logo" aria-label="My Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    My Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multi-agent-orchestration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-Agent Orchestration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../live-sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Live Sessions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../button-macros/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Button Macros
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent Protocol (PULSE)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../session-history-search/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Session History & Search
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../metrics-observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Metrics & Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scheduled-jobs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scheduled Jobs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../one-time-jobs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    One-Time Jobs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhook Notifications
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhook Notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setting-up-webhooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setting up webhooks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Setting up webhooks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#creating-a-webhook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Creating a webhook
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#slack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Slack
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discord" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discord
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generic-http-post" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generic HTTP POST
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-webhooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing webhooks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#viewing-delivery-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Viewing delivery history
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#managing-webhooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Managing webhooks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Managing webhooks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#editing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Editing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#disabling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Disabling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deleting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deleting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auto-disable-on-repeated-failures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auto-disable on repeated failures
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#events" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Events
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#payload-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Payload formats
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Payload formats">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#slack_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Slack
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discord_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discord
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generic
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reliability-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reliability details
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ui-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UI reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/jobs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jobs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/webhooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhooks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setting-up-webhooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setting up webhooks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Setting up webhooks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#creating-a-webhook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Creating a webhook
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#slack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Slack
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discord" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discord
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generic-http-post" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generic HTTP POST
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-webhooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing webhooks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#viewing-delivery-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Viewing delivery history
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#managing-webhooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Managing webhooks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Managing webhooks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#editing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Editing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#disabling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Disabling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deleting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deleting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auto-disable-on-repeated-failures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auto-disable on repeated failures
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#events" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Events
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#payload-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Payload formats
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Payload formats">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#slack_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Slack
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discord_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discord
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generic
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reliability-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reliability details
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ui-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UI reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="webhook-notifications">Webhook Notifications</h1>
+<p>Webhook Notifications let you receive HTTP POST alerts when an agent needs attention. Instead of watching the dashboard, you can route notifications to Slack, Discord, or any HTTP endpoint — so you know the moment an agent is stuck waiting for input.</p>
+<p>Corral supports three platforms out of the box: <strong>Slack</strong>, <strong>Discord</strong>, and <strong>Generic HTTP POST</strong>. Webhooks are configured entirely through the dashboard UI, with built-in retry logic and a circuit breaker to keep things reliable without overwhelming a failing endpoint.</p>
+<!-- TODO: Screenshot - Webhook modal overview showing the list of configured webhooks -->
+
+<hr />
+<h2 id="how-it-works">How it works</h2>
+<p>Corral monitors every live agent session. When an agent has been waiting for input for <strong>5 or more minutes</strong>, a <code>needs_input</code> event fires and is dispatched to all matching webhooks. The notification fires <strong>once per waiting period</strong> — it will not repeat until the agent becomes active again and then re-enters a waiting state.</p>
+<p>Each delivery attempt follows this reliability model:</p>
+<ul>
+<li><strong>Retry schedule</strong> — Up to 3 attempts with exponential backoff: 30 seconds, 2 minutes, 10 minutes.</li>
+<li><strong>Circuit breaker</strong> — After 10 consecutive delivery failures, the webhook is automatically disabled to prevent noise.</li>
+<li><strong>Timeout</strong> — Each HTTP attempt times out after 10 seconds.</li>
+</ul>
+<hr />
+<h2 id="setting-up-webhooks">Setting up webhooks</h2>
+<h3 id="creating-a-webhook">Creating a webhook</h3>
+<ol>
+<li>Click the <strong>Webhooks</strong> button in the toolbar.</li>
+<li>Click <strong>+ Add Webhook</strong>.</li>
+<li>Fill in the form:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Name</strong></td>
+<td>A display label (e.g., "Slack #dev-agents")</td>
+</tr>
+<tr>
+<td><strong>Platform</strong></td>
+<td>Slack, Discord, or Generic</td>
+</tr>
+<tr>
+<td><strong>URL</strong></td>
+<td>The webhook endpoint URL</td>
+</tr>
+<tr>
+<td><strong>Agent Filter</strong></td>
+<td>Optional — limit notifications to specific agents</td>
+</tr>
+<tr>
+<td><strong>Enabled</strong></td>
+<td>Toggle the webhook on or off</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>Click <strong>Save</strong>.</li>
+</ol>
+<!-- TODO: Screenshot - Add Webhook form filled out with example values -->
+
+<h3 id="slack">Slack</h3>
+<ol>
+<li>Go to <a href="https://api.slack.com">api.slack.com</a> and create a new Slack app (or use an existing one).</li>
+<li>Under <strong>Incoming Webhooks</strong>, toggle the feature on.</li>
+<li>Click <strong>Add New Webhook to Workspace</strong> and select the channel you want notifications in.</li>
+<li>Copy the webhook URL — it looks like <code>https://hooks.slack.com/services/...</code>.</li>
+<li>In Corral, create a new webhook with <strong>Platform</strong> set to <strong>Slack</strong> and paste the URL.</li>
+<li>Click <strong>Test</strong> to verify the connection.</li>
+</ol>
+<p>!!! tip
+    Each Slack webhook URL is tied to a specific channel. Create multiple Corral webhooks if you want to notify different channels.</p>
+<h3 id="discord">Discord</h3>
+<ol>
+<li>Open the Discord channel you want to receive notifications in.</li>
+<li>Go to <strong>Channel Settings &gt; Integrations &gt; Webhooks</strong>.</li>
+<li>Click <strong>New Webhook</strong>, give it a name, and click <strong>Copy Webhook URL</strong> — it looks like <code>https://discord.com/api/webhooks/...</code>.</li>
+<li>In Corral, create a new webhook with <strong>Platform</strong> set to <strong>Discord</strong> and paste the URL.</li>
+<li>Click <strong>Test</strong> to verify the connection.</li>
+</ol>
+<h3 id="generic-http-post">Generic HTTP POST</h3>
+<p>Any HTTP endpoint that accepts a JSON POST body and returns a <code>2xx</code> status code to acknowledge receipt. Use this for custom integrations, monitoring systems, or internal tooling.</p>
+<p>Set <strong>Platform</strong> to <strong>Generic</strong> and provide your endpoint URL.</p>
+<hr />
+<h2 id="testing-webhooks">Testing webhooks</h2>
+<p>Click the <strong>Test</strong> button next to any webhook in the list. This sends a test <code>needs_input</code> event immediately — it bypasses the normal dispatch queue so you get instant feedback.</p>
+<p>A toast notification shows the result: success or failure with the HTTP status code. The test delivery also appears in the webhook's <strong>History</strong> view.</p>
+<p>!!! info
+    The test event uses synthetic data, so you can verify formatting and connectivity without waiting for a real agent to go idle.</p>
+<hr />
+<h2 id="viewing-delivery-history">Viewing delivery history</h2>
+<p>Click <strong>History</strong> on any webhook to see up to 50 recent deliveries. Each entry shows:</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Status</strong></td>
+<td><code>delivered</code>, <code>failed</code>, or <code>pending</code></td>
+</tr>
+<tr>
+<td><strong>Agent</strong></td>
+<td>Which agent triggered the event</td>
+</tr>
+<tr>
+<td><strong>Event Type</strong></td>
+<td>The event that fired (e.g., <code>needs_input</code>)</td>
+</tr>
+<tr>
+<td><strong>Summary</strong></td>
+<td>Human-readable description of the event</td>
+</tr>
+<tr>
+<td><strong>Timestamp</strong></td>
+<td>When the delivery was attempted</td>
+</tr>
+</tbody>
+</table>
+<p>Failed deliveries show the HTTP status code and error message for debugging.</p>
+<!-- TODO: Screenshot - Delivery history table showing a mix of delivered and failed entries -->
+
+<hr />
+<h2 id="managing-webhooks">Managing webhooks</h2>
+<h3 id="editing">Editing</h3>
+<p>Click a webhook in the list to open it for editing. Change any field and click <strong>Save</strong>.</p>
+<h3 id="disabling">Disabling</h3>
+<p>Toggle the <strong>Enabled</strong> switch off to pause a webhook without deleting it. Deliveries stop immediately and queued retries are skipped.</p>
+<h3 id="deleting">Deleting</h3>
+<p>Click <strong>Delete</strong> to permanently remove a webhook and its delivery history.</p>
+<h3 id="auto-disable-on-repeated-failures">Auto-disable on repeated failures</h3>
+<p>If a webhook accumulates <strong>10 consecutive delivery failures</strong>, Corral automatically disables it and shows an <strong>Auto-Disabled</strong> badge. This prevents a broken endpoint from consuming retry resources indefinitely.</p>
+<p>To recover, fix the underlying issue (expired URL, server down, etc.), then manually re-enable the webhook and click <strong>Test</strong> to confirm.</p>
+<p>!!! warning
+    Auto-disabled webhooks will not fire again until you explicitly re-enable them. Check the webhook list periodically if you rely on notifications.</p>
+<hr />
+<h2 id="events">Events</h2>
+<p>Corral currently supports one webhook event type:</p>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Trigger</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>needs_input</code></td>
+<td>Agent has been idle for 5+ minutes while waiting for input</td>
+<td>Fires once per waiting period. Clears when the agent becomes active again.</td>
+</tr>
+</tbody>
+</table>
+<p>Each event carries this schema:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>agent_name</code></td>
+<td>Name of the agent session</td>
+</tr>
+<tr>
+<td><code>session_id</code></td>
+<td>UUID of the session</td>
+</tr>
+<tr>
+<td><code>event_type</code></td>
+<td>The event type string (e.g., <code>needs_input</code>)</td>
+</tr>
+<tr>
+<td><code>event_summary</code></td>
+<td>Human-readable description</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="payload-formats">Payload formats</h2>
+<p>Each platform receives a differently formatted payload optimized for its rendering engine.</p>
+<h3 id="slack_1">Slack</h3>
+<pre><code class="language-json">{
+  &quot;blocks&quot;: [
+    {
+      &quot;type&quot;: &quot;section&quot;,
+      &quot;text&quot;: {
+        &quot;type&quot;: &quot;mrkdwn&quot;,
+        &quot;text&quot;: &quot;:raising_hand: *Corral — NEEDS_INPUT*\n*Agent:* `agent-name`\n*Message:* Agent needs input — waiting for 12 minutes&quot;
+      }
+    }
+  ]
+}
+</code></pre>
+<h3 id="discord_1">Discord</h3>
+<pre><code class="language-json">{
+  &quot;embeds&quot;: [
+    {
+      &quot;title&quot;: &quot;Corral — NEEDS_INPUT&quot;,
+      &quot;description&quot;: &quot;Agent needs input — waiting for 12 minutes&quot;,
+      &quot;color&quot;: 13801762,
+      &quot;fields&quot;: [
+        {
+          &quot;name&quot;: &quot;Agent&quot;,
+          &quot;value&quot;: &quot;`agent-name`&quot;,
+          &quot;inline&quot;: true
+        }
+      ],
+      &quot;footer&quot;: {
+        &quot;text&quot;: &quot;Corral&quot;
+      }
+    }
+  ]
+}
+</code></pre>
+<h3 id="generic">Generic</h3>
+<pre><code class="language-json">{
+  &quot;agent_name&quot;: &quot;agent-name&quot;,
+  &quot;session_id&quot;: &quot;uuid&quot;,
+  &quot;event_type&quot;: &quot;needs_input&quot;,
+  &quot;summary&quot;: &quot;Agent needs input — waiting for 12 minutes&quot;,
+  &quot;timestamp&quot;: &quot;2025-03-11T10:05:00+00:00&quot;,
+  &quot;source&quot;: &quot;corral&quot;
+}
+</code></pre>
+<hr />
+<h2 id="reliability-details">Reliability details</h2>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Retry attempts</td>
+<td>3</td>
+</tr>
+<tr>
+<td>Backoff schedule</td>
+<td>30 seconds, 2 minutes, 10 minutes</td>
+</tr>
+<tr>
+<td>Circuit breaker threshold</td>
+<td>10 consecutive failures</td>
+</tr>
+<tr>
+<td>Delivery history retention</td>
+<td>Latest 200 per webhook</td>
+</tr>
+<tr>
+<td>Idle detector polling interval</td>
+<td>60 seconds</td>
+</tr>
+<tr>
+<td>Dispatcher polling interval</td>
+<td>15 seconds</td>
+</tr>
+<tr>
+<td>Idle threshold</td>
+<td>5 minutes</td>
+</tr>
+<tr>
+<td>Notification behavior</td>
+<td>One-shot per waiting period</td>
+</tr>
+<tr>
+<td>URL validation</td>
+<td>HTTPS required (except <code>localhost</code>)</td>
+</tr>
+<tr>
+<td>Request timeout</td>
+<td>10 seconds per attempt</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="ui-reference">UI reference</h2>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Webhook modal</td>
+<td>Main overlay opened via the <strong>Webhooks</strong> toolbar button</td>
+</tr>
+<tr>
+<td>List view</td>
+<td>Shows all configured webhooks with name, platform, and status</td>
+</tr>
+<tr>
+<td>Status dot</td>
+<td>Green (enabled), gray (disabled)</td>
+</tr>
+<tr>
+<td>Auto-Disabled badge</td>
+<td>Red badge indicating circuit breaker tripped</td>
+</tr>
+<tr>
+<td>Platform label</td>
+<td><code>SLACK</code>, <code>DISCORD</code>, or <code>GENERIC</code> next to each webhook</td>
+</tr>
+<tr>
+<td>Agent filter</td>
+<td>Shows which agents the webhook applies to, or "All"</td>
+</tr>
+<tr>
+<td>Form</td>
+<td>Add/edit form with name, platform, URL, agent filter, and enabled toggle</td>
+</tr>
+<tr>
+<td>History view</td>
+<td>Per-webhook delivery log with status, agent, event, summary, and timestamp</td>
+</tr>
+<tr>
+<td>Test button</td>
+<td>Sends a synthetic event immediately to verify connectivity</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="../live-sessions/">Live Sessions</a> — Real-time agent monitoring and control</li>
+<li><a href="../one-time-jobs/">One-Time Jobs</a> — Jobs API, including the <code>webhook_url</code> parameter for per-job notifications</li>
+<li><a href="../scheduled-jobs/">Scheduled Jobs</a> — Recurring job scheduling</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

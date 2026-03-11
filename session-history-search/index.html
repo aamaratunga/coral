@@ -1,0 +1,1702 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../protocol/">
+      
+      
+        <link rel="next" href="../metrics-observability/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+    
+    
+      
+        <title>Session History & Search - My Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#session-history-search" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="My Docs" class="md-header__button md-logo" aria-label="My Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            My Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Session History & Search
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="My Docs" class="md-nav__button md-logo" aria-label="My Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    My Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multi-agent-orchestration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-Agent Orchestration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../live-sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Live Sessions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../button-macros/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Button Macros
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent Protocol (PULSE)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Session History & Search
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Session History & Search
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-its-useful" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why it's useful
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#browsing-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Browsing history
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#searching-sessions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Searching sessions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-advanced-filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using advanced filters
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Using advanced filters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#available-filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Available filters
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#viewing-a-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Viewing a session
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Viewing a session">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#session-header" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session header
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#content-tabs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Content tabs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Content tabs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chat
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#activity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Activity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tasks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Commits
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tagging-sessions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tagging sessions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tagging sessions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adding-a-tag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding a tag
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-tags-as-filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using tags as filters
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#writing-and-editing-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Writing and editing notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Writing and editing notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#editing-the-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Editing the summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#re-summarizing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Re-summarizing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resuming-a-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resuming a session
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#search-syntax-and-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Search syntax and tips
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Search syntax and tips">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fts-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FTS modes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#porter-stemming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Porter stemming
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-indexed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is indexed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quoted-sub-phrases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quoted sub-phrases
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Safety
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-indexing-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How indexing works
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How indexing works">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#triggering-a-manual-re-index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Triggering a manual re-index
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#database-location" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Database location
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../metrics-observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Metrics & Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scheduled-jobs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scheduled Jobs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../one-time-jobs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    One-Time Jobs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../webhooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhook Notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/jobs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jobs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/webhooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhooks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-its-useful" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why it's useful
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#browsing-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Browsing history
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#searching-sessions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Searching sessions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-advanced-filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using advanced filters
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Using advanced filters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#available-filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Available filters
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#viewing-a-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Viewing a session
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Viewing a session">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#session-header" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session header
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#content-tabs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Content tabs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Content tabs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chat
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#activity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Activity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tasks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Commits
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tagging-sessions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tagging sessions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tagging sessions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adding-a-tag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding a tag
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-tags-as-filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using tags as filters
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#writing-and-editing-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Writing and editing notes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Writing and editing notes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#editing-the-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Editing the summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#re-summarizing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Re-summarizing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resuming-a-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resuming a session
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#search-syntax-and-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Search syntax and tips
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Search syntax and tips">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fts-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FTS modes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#porter-stemming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Porter stemming
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-indexed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is indexed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quoted-sub-phrases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quoted sub-phrases
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Safety
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-indexing-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How indexing works
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How indexing works">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#triggering-a-manual-re-index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Triggering a manual re-index
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#database-location" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Database location
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="session-history-search">Session History &amp; Search</h1>
+<p>Corral automatically indexes every Claude and Gemini coding session into a searchable database. Whether you ran a quick one-off prompt or a multi-hour refactoring marathon, every session is preserved and searchable from the dashboard.</p>
+<p>Sessions are discovered from Claude history files (<code>~/.claude/projects/*/*.jsonl</code>) and Gemini session files, then indexed into SQLite with FTS5 full-text search. A background <code>SessionIndexer</code> scans for new or updated session files every 120 seconds, so recent sessions appear without any manual action. Each newly discovered session is also enqueued for AI-powered summarization — <code>BatchSummarizer</code> generates a markdown summary using <code>claude --print --model haiku</code>, giving you a readable overview of what happened in each session.</p>
+<p>The result is a browsable, searchable archive of every coding conversation across all your projects and agents.</p>
+<hr />
+<h2 id="why-its-useful">Why it's useful</h2>
+<ul>
+<li><strong>Find past work fast</strong> — Full-text search across every message in every session. Search for a function name, error message, or topic and jump straight to the relevant session.</li>
+<li><strong>Track what agents did</strong> — See the full transcript, activity timeline, commits, and tasks for any historical session, even weeks later.</li>
+<li><strong>Organize with tags</strong> — Tag sessions by feature, project, or priority and use tags as filters for quick retrieval.</li>
+<li><strong>Pick up where you left off</strong> — Resume any Claude session on a live agent with full conversation context restored.</li>
+<li><strong>AI-generated summaries</strong> — Every session gets an auto-generated markdown summary so you can skim history without re-reading entire transcripts.</li>
+</ul>
+<hr />
+<h2 id="browsing-history">Browsing history</h2>
+<p>The <strong>History</strong> section of the sidebar lists all indexed sessions, sorted by most recent activity. Each sidebar entry shows:</p>
+<ul>
+<li>Timestamp and duration</li>
+<li>Agent type badge (Claude or Gemini)</li>
+<li>Git branch name</li>
+<li>Tags (as colored pills)</li>
+<li>Summary title (first heading from the AI-generated summary)</li>
+</ul>
+<p>Click any session to open it in the main panel. The list paginates at 50 sessions per page — use the pagination controls at the bottom of the sidebar to navigate older sessions.</p>
+<!-- TODO: Screenshot - Sidebar showing the History section with several session entries displaying timestamps, badges, branch names, and tags -->
+
+<hr />
+<h2 id="searching-sessions">Searching sessions</h2>
+<p>Type in the search box at the top of the History sidebar to search across all indexed sessions. Results are ranked by FTS5 relevance when a search query is active, rather than by recency.</p>
+<p>The search indexes the <strong>full body of all messages</strong> — both your prompts and the agent's responses. This means you can search for specific code snippets, error messages, file paths, or any text that appeared in a conversation.</p>
+<!-- TODO: Screenshot - Search box with a query entered and filtered results in the sidebar -->
+
+<p>!!! tip
+    FTS5 uses Porter stemming by default, so searching for "testing" also matches "test", "tests", and "tested".</p>
+<hr />
+<h2 id="using-advanced-filters">Using advanced filters</h2>
+<p>Click the <strong>funnel icon</strong> next to the search box to open the advanced filter panel. When filters are active, a badge on the funnel icon shows the number of active filters.</p>
+<h3 id="available-filters">Available filters</h3>
+<table>
+<thead>
+<tr>
+<th>Filter</th>
+<th>Options</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>FTS Mode</strong></td>
+<td>Phrase / All words / Any word</td>
+<td>Controls how search terms are combined (see <a href="#search-syntax-and-tips">Search syntax</a>)</td>
+</tr>
+<tr>
+<td><strong>Source</strong></td>
+<td>All / Claude / Gemini</td>
+<td>Filter by agent type</td>
+</tr>
+<tr>
+<td><strong>Tags</strong></td>
+<td>Select one or more tags, with AND/OR logic</td>
+<td>Show only sessions with specific tags</td>
+</tr>
+<tr>
+<td><strong>Date Range</strong></td>
+<td>From / To date pickers</td>
+<td>Limit results to a time window</td>
+</tr>
+<tr>
+<td><strong>Duration</strong></td>
+<td>Min / Max duration</td>
+<td>Filter by session length</td>
+</tr>
+</tbody>
+</table>
+<p>Use the <strong>Clear filters</strong> button to reset all filters at once. Filter state is encoded in the URL, so you can bookmark or share a filtered view.</p>
+<!-- TODO: Screenshot - Advanced filter panel expanded, showing FTS Mode, Source, Tags, Date Range, and Duration filters -->
+
+<hr />
+<h2 id="viewing-a-session">Viewing a session</h2>
+<p>When you open a historical session, the main panel shows a header with session metadata and six content tabs.</p>
+<h3 id="session-header">Session header</h3>
+<p>The header displays the session timestamp, duration, agent type badge, branch, and summary title. Action buttons include:</p>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Resume</strong></td>
+<td>Resume this session on a live agent (Claude only)</td>
+</tr>
+<tr>
+<td><strong>+ Tag</strong></td>
+<td>Add a tag to this session</td>
+</tr>
+</tbody>
+</table>
+<h3 id="content-tabs">Content tabs</h3>
+<h4 id="summary">Summary</h4>
+<p>The Summary tab shows the AI-generated markdown summary of the session. This is produced automatically by the <code>BatchSummarizer</code> and provides a readable overview of the session's goals, actions, and outcomes.</p>
+<p>Two buttons appear at the top of the tab:</p>
+<ul>
+<li><strong>Edit</strong> — Open a markdown editor to write or revise the summary</li>
+<li><strong>Re-summarize</strong> — Re-run the AI summarizer to generate a fresh summary</li>
+</ul>
+<!-- TODO: Screenshot - Summary tab showing a rendered markdown summary with Edit and Re-summarize buttons -->
+
+<h4 id="chat">Chat</h4>
+<p>The Chat tab shows the full conversation transcript between you and the agent. User messages, assistant responses, and tool-use cards (Bash commands, file edits, reads, etc.) are all displayed in order.</p>
+<h4 id="activity">Activity</h4>
+<p>The Activity tab shows an event timeline and bar chart of agent actions during the session. Events include file reads, writes, edits, bash commands, searches, and PULSE protocol events. Use the filter controls to toggle specific event types on or off.</p>
+<h4 id="tasks">Tasks</h4>
+<p>The Tasks tab displays the task checklist associated with the session. Tasks are read-only in historical sessions but show their completion state with checkboxes.</p>
+<h4 id="notes">Notes</h4>
+<p>The Notes tab shows any agent-written notes from the session. These are the notes the agent recorded while working, separate from the user-editable summary.</p>
+<h4 id="commits">Commits</h4>
+<p>The Commits tab lists all git commits that occurred during the session's time range. Each commit shows its hash, message, author, and timestamp.</p>
+<!-- TODO: Screenshot - Session detail view showing the six tabs with the Summary tab selected -->
+
+<hr />
+<h2 id="tagging-sessions">Tagging sessions</h2>
+<p>Tags help you organize sessions by project, feature, status, or any other category.</p>
+<h3 id="adding-a-tag">Adding a tag</h3>
+<ol>
+<li>Click the <strong>+ Tag</strong> button in the session header.</li>
+<li>Select an existing tag from the dropdown, or create a new one by entering a name and picking a color.</li>
+<li>The tag appears as a colored pill on the session entry in the sidebar and in the session header.</li>
+</ol>
+<h3 id="using-tags-as-filters">Using tags as filters</h3>
+<p>Tags are available as a filter in the <a href="#using-advanced-filters">advanced filter panel</a>. You can select multiple tags and choose whether to match sessions with <strong>all</strong> selected tags (AND) or <strong>any</strong> of them (OR).</p>
+<!-- TODO: Screenshot - Tag picker dropdown showing existing tags and the option to create a new tag -->
+
+<hr />
+<h2 id="writing-and-editing-notes">Writing and editing notes</h2>
+<h3 id="editing-the-summary">Editing the summary</h3>
+<p>Click the <strong>Edit</strong> button on the Summary tab to open a markdown editor. Write or revise the summary content and save. Once you manually edit a summary, the auto-summarizer will not overwrite your changes — user edits are always preserved.</p>
+<h3 id="re-summarizing">Re-summarizing</h3>
+<p>Click the <strong>Re-summarize</strong> button to discard the current auto-generated summary and queue the session for a fresh AI summary. This is useful if the original summary was generated before the session was complete, or if you want to regenerate it after clearing a manual edit.</p>
+<p>!!! info
+    The Re-summarize button only regenerates the AI summary. If you have manually edited the summary, your edits take priority and the auto-summary is stored separately. Clear your manual edits first if you want the re-generated summary to be displayed.</p>
+<hr />
+<h2 id="resuming-a-session">Resuming a session</h2>
+<p>You can continue any historical Claude session on a live agent:</p>
+<ol>
+<li>Open the session in the history view.</li>
+<li>Click the <strong>Resume</strong> button in the session header.</li>
+<li>In the Resume modal, select which currently live agent should continue the session.</li>
+<li>Corral restarts the selected agent with <code>--resume</code>, loading the full conversation context from the previous session.</li>
+</ol>
+<p>The resumed session picks up with full context, so the agent remembers everything from the original conversation.</p>
+<p>!!! warning
+    Resume is supported for <strong>Claude agents only</strong>. Gemini does not support session resume.</p>
+<p>For more on live session management, see <a href="../live-sessions/">Live Sessions</a>.</p>
+<hr />
+<h2 id="search-syntax-and-tips">Search syntax and tips</h2>
+<h3 id="fts-modes">FTS modes</h3>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Behavior</th>
+<th>Example query</th>
+<th>Matches</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>All words</strong> (default)</td>
+<td>All terms must appear (AND)</td>
+<td><code>auth middleware</code></td>
+<td>Sessions containing both "auth" and "middleware"</td>
+</tr>
+<tr>
+<td><strong>Phrase</strong></td>
+<td>Exact phrase match</td>
+<td><code>auth middleware</code></td>
+<td>Sessions containing the exact phrase "auth middleware"</td>
+</tr>
+<tr>
+<td><strong>Any word</strong></td>
+<td>Any term can appear (OR)</td>
+<td><code>auth middleware</code></td>
+<td>Sessions containing "auth" or "middleware" or both</td>
+</tr>
+</tbody>
+</table>
+<h3 id="porter-stemming">Porter stemming</h3>
+<p>FTS5 uses Porter stemming, which means search terms are reduced to their root form:</p>
+<table>
+<thead>
+<tr>
+<th>You search for</th>
+<th>Also matches</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>testing</code></td>
+<td>test, tests, tested</td>
+</tr>
+<tr>
+<td><code>configured</code></td>
+<td>configure, configures, configuration</td>
+</tr>
+<tr>
+<td><code>running</code></td>
+<td>run, runs, ran</td>
+</tr>
+</tbody>
+</table>
+<h3 id="what-is-indexed">What is indexed</h3>
+<p>The search index contains the <strong>full text of all messages</strong> in each session — both user prompts and agent responses, including tool inputs and outputs. This means you can search for:</p>
+<ul>
+<li>Code snippets and function names</li>
+<li>Error messages and stack traces</li>
+<li>File paths</li>
+<li>Natural language descriptions of tasks</li>
+</ul>
+<h3 id="quoted-sub-phrases">Quoted sub-phrases</h3>
+<p>You can include quoted sub-phrases within an All words or Any word query. For example, in All words mode, <code>"error handling" refactor</code> matches sessions containing both the exact phrase "error handling" and the word "refactor".</p>
+<h3 id="safety">Safety</h3>
+<p>FTS5 operator tokens (<code>AND</code>, <code>OR</code>, <code>NOT</code>) entered as bare words in the search box are stripped automatically to prevent query injection. This means you can safely search for the word "not" without it being interpreted as a boolean operator.</p>
+<hr />
+<h2 id="how-indexing-works">How indexing works</h2>
+<p>The indexing pipeline runs automatically in the background as part of the Corral web server.</p>
+<ol>
+<li><strong>SessionIndexer</strong> scans all agent history file paths every 120 seconds. It tracks each file's <code>file_mtime</code> and skips files that have not changed since the last scan.</li>
+<li>New or updated sessions are upserted into the <code>session_index</code> table, and their full message text is inserted into the <code>session_fts</code> FTS5 virtual table.</li>
+<li>Each newly indexed session is enqueued in the <code>summarizer_queue</code> table.</li>
+<li><strong>BatchSummarizer</strong> polls the queue and processes up to 5 pending sessions at a time, generating markdown summaries via <code>claude --print --model haiku</code>.</li>
+</ol>
+<h3 id="triggering-a-manual-re-index">Triggering a manual re-index</h3>
+<p>If you need sessions to appear immediately without waiting for the next 120-second cycle, send a POST request:</p>
+<pre><code class="language-bash">curl -X POST http://localhost:8420/api/indexer/refresh
+</code></pre>
+<h3 id="database-location">Database location</h3>
+<p>All session data is stored in <code>~/.corral/sessions.db</code> (SQLite, WAL mode). The database includes the session index, FTS5 search index, tags, notes, summaries, and the summarizer queue.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

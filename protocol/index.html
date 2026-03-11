@@ -1,0 +1,1226 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../button-macros/">
+      
+      
+        <link rel="next" href="../session-history-search/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+    
+    
+      
+        <title>Agent Protocol (PULSE) - My Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#agent-protocol-pulse" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="My Docs" class="md-header__button md-logo" aria-label="My Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            My Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Agent Protocol (PULSE)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="My Docs" class="md-nav__button md-logo" aria-label="My Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    My Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multi-agent-orchestration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-Agent Orchestration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../live-sessions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Live Sessions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../button-macros/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Button Macros
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent Protocol (PULSE)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent Protocol (PULSE)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#protocol-events-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Protocol events reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Protocol events reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        STATUS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SUMMARY
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#confidence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CONFIDENCE
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dashboard-display" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dashboard display
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom agents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#claude-code-hooks-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Claude Code hooks integration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../session-history-search/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Session History & Search
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../metrics-observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Metrics & Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scheduled-jobs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scheduled Jobs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../one-time-jobs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    One-Time Jobs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../webhooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhook Notifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/jobs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Jobs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/webhooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhooks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#protocol-events-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Protocol events reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Protocol events reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        STATUS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SUMMARY
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#confidence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CONFIDENCE
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dashboard-display" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dashboard display
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom agents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#claude-code-hooks-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Claude Code hooks integration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="agent-protocol-pulse">Agent Protocol (PULSE)</h1>
+<p>The PULSE protocol is a lightweight, text-based protocol that agents emit to stdout. Corral's dashboard parses these tags in real time to surface what each agent is doing, what it's trying to accomplish, and when it's uncertain.</p>
+<p>The protocol is pull-based: agents write tagged lines to stdout, tmux <code>pipe-pane</code> captures them to a log file, and the dashboard tails the logs. It works for any agent type — Claude, Gemini, or custom processes. Three pieces of context are tracked:</p>
+<ul>
+<li><strong>Status</strong> — What the agent is doing right now</li>
+<li><strong>Goal</strong> — The agent's overall objective</li>
+<li><strong>Confidence</strong> — Whether the agent is uncertain about its approach</li>
+</ul>
+<hr />
+<h2 id="protocol-events-reference">Protocol events reference</h2>
+<p>All events use the format <code>||PULSE:&lt;EVENT_TYPE&gt; &lt;payload&gt;||</code>. The dashboard extracts these from agent output via regex.</p>
+<h3 id="status">STATUS</h3>
+<p>Reports the agent's current task. Changes frequently.</p>
+<pre><code>||PULSE:STATUS &lt;Short Description&gt;||
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Guideline</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>When to emit</td>
+<td>Before and after each subtask</td>
+</tr>
+<tr>
+<td>Length</td>
+<td>Under 60 characters</td>
+</tr>
+<tr>
+<td>Voice</td>
+<td>Present participle ("Implementing...", "Fixing...")</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Examples:</strong></p>
+<pre><code>||PULSE:STATUS Reading codebase structure||
+||PULSE:STATUS Implementing auth middleware||
+||PULSE:STATUS Running test suite||
+||PULSE:STATUS Task complete||
+</code></pre>
+<p>!!! tip
+    If the agent is idle, emit <code>||PULSE:STATUS Waiting for instructions||</code> so the dashboard shows meaningful state instead of going stale.</p>
+<hr />
+<h3 id="summary">SUMMARY</h3>
+<p>Reports the agent's high-level goal. Changes infrequently.</p>
+<pre><code>||PULSE:SUMMARY &lt;One-sentence goal&gt;||
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Guideline</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>When to emit</td>
+<td>Once at session start, and again when the goal shifts</td>
+</tr>
+<tr>
+<td>Length</td>
+<td>Under 120 characters</td>
+</tr>
+<tr>
+<td>Content</td>
+<td>Describes <em>what you're trying to accomplish</em>, not what you're doing right now</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Examples:</strong></p>
+<pre><code>||PULSE:SUMMARY Implementing user authentication end-to-end||
+||PULSE:SUMMARY Debugging flaky test in test_payments.py||
+||PULSE:SUMMARY Refactoring the database layer to use the repository pattern||
+</code></pre>
+<p>!!! info
+    The SUMMARY value stays stable across many STATUS updates. If no SUMMARY is emitted, the Goal line in the dashboard header remains empty.</p>
+<hr />
+<h3 id="confidence">CONFIDENCE</h3>
+<p>Flags uncertainty (or non-obvious confidence) for the operator.</p>
+<pre><code>||PULSE:CONFIDENCE &lt;Low|High&gt; &lt;specific reason&gt;||
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>When to use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Low</strong></td>
+<td>You are uncertain or guessing. The operator should review. Always emit when unsure.</td>
+</tr>
+<tr>
+<td><strong>High</strong></td>
+<td>A decision is non-obvious but you have strong evidence. Emit sparingly.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Examples:</strong></p>
+<pre><code>||PULSE:CONFIDENCE Low Unfamiliar with this auth library — guessing at the API||
+||PULSE:CONFIDENCE Low Multiple possible root causes — picking the most likely one||
+||PULSE:CONFIDENCE High This follows the existing repository pattern exactly||
+</code></pre>
+<p>!!! warning
+    The confidence level is <code>Low</code> or <code>High</code> — not a numeric scale. The reason must be specific; explain <em>why</em> you are confident or not.</p>
+<p>!!! tip
+    Prefer emitting <code>Low</code> over staying silent. It is more useful to flag uncertainty than to hide it.</p>
+<hr />
+<h2 id="how-it-works">How it works</h2>
+<p>The PULSE protocol flows through a pipeline from agent output to the browser:</p>
+<ol>
+<li><strong>Agent emits a PULSE tag</strong> to stdout (e.g., <code>||PULSE:STATUS Reading tests||</code>).</li>
+<li><strong>tmux <code>pipe-pane</code></strong> captures all terminal output to <code>/tmp/&lt;type&gt;_corral_&lt;name&gt;.log</code>.</li>
+<li><strong>Log streamer</strong> reads the log file backwards, strips ANSI escape codes, rejoins lines that were split by terminal wrapping, and extracts the latest STATUS and SUMMARY values via regex.</li>
+<li><strong>Pulse detector</strong> incrementally scans the log for CONFIDENCE events and records them as activity entries.</li>
+<li><strong>Live sessions API</strong> calls both the log streamer and pulse detector on every poll cycle (every 3 seconds via WebSocket).</li>
+<li><strong>Status/Summary dedup</strong> — the store only inserts a new row when the value actually changes, so repeated identical emissions are collapsed.</li>
+<li><strong>WebSocket</strong> pushes the updated session state to all connected browsers every 3 seconds.</li>
+<li><strong>Dashboard renders</strong> the status in the session header "Status:" line, the summary as the "Goal:" line, and confidence events in the Activity timeline.</li>
+</ol>
+<!-- TODO: Screenshot - Data flow diagram showing the pipeline from agent stdout through tmux pipe-pane, log file, log streamer, WebSocket, to browser dashboard -->
+
+<hr />
+<h2 id="dashboard-display">Dashboard display</h2>
+<!-- TODO: Screenshot - Session header showing Status and Goal lines with a live agent -->
+
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Location</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Status</strong></td>
+<td>Session header, "Status:" line</td>
+<td>Latest <code>||PULSE:STATUS||</code> value</td>
+</tr>
+<tr>
+<td><strong>Goal</strong></td>
+<td>Session header, "Goal:" line</td>
+<td>Latest <code>||PULSE:SUMMARY||</code> value</td>
+</tr>
+<tr>
+<td><strong>Confidence</strong></td>
+<td>Activity timeline, dedicated icon</td>
+<td><code>||PULSE:CONFIDENCE||</code> events</td>
+</tr>
+</tbody>
+</table>
+<p>All three event types appear in the Activity tab and are filterable using the <strong>Filter</strong> dropdown. See <a href="../live-sessions/#activity">Live Sessions — Activity</a> for details on the timeline view.</p>
+<!-- TODO: Screenshot - Activity timeline showing Status, Goal, and Confidence events with filter dropdown -->
+
+<hr />
+<h2 id="custom-agents">Custom agents</h2>
+<p>Any process that writes <code>||PULSE:STATUS ...||</code> to stdout will work with Corral. The dashboard does not care what language or framework the agent uses — it only parses the log file.</p>
+<p><strong>How the protocol reaches each agent type:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Claude</strong></td>
+<td>Auto-injected via <code>--append-system-prompt</code> when Corral launches the agent</td>
+</tr>
+<tr>
+<td><strong>Gemini</strong></td>
+<td>Injected via the <code>GEMINI_SYSTEM_MD</code> environment variable</td>
+</tr>
+<tr>
+<td><strong>Custom</strong></td>
+<td>Paste the protocol text into your agent's system prompt, or have your wrapper script emit PULSE tags directly</td>
+</tr>
+</tbody>
+</table>
+<p>!!! tip
+    If you're wrapping an external tool (Aider, Cursor, OpenDevin, etc.), you only need a thin shell script that emits PULSE tags at key points. The agent itself doesn't need to know about Corral.</p>
+<hr />
+<h2 id="claude-code-hooks-integration">Claude Code hooks integration</h2>
+<p>Corral has two complementary channels for tracking agent activity:</p>
+<table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>Transport</th>
+<th>Scope</th>
+<th>Data</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PULSE protocol</strong></td>
+<td>Log-based (stdout to file)</td>
+<td>All agent types</td>
+<td>Status, goal, confidence</td>
+</tr>
+<tr>
+<td><strong>Claude Code hooks</strong></td>
+<td>API-based (HTTP to Corral server)</td>
+<td>Claude only</td>
+<td>Tool use, task sync, agentic state</td>
+</tr>
+</tbody>
+</table>
+<p>The hooks provide richer, structured data — individual tool calls (Read, Edit, Bash, etc.), task creation/updates, and stop/notification events. They are auto-installed by Corral into each worktree when a Claude agent is launched.</p>
+<p>To configure hooks manually, add the following to your Claude Code settings (<code>~/.claude.json</code> or <code>~/.claude/settings.json</code>):</p>
+<pre><code class="language-json">&quot;hooks&quot;: {
+    &quot;PostToolUse&quot;: [
+      {
+        &quot;matcher&quot;: &quot;TaskCreate|TaskUpdate&quot;,
+        &quot;hooks&quot;: [
+          {
+            &quot;type&quot;: &quot;command&quot;,
+            &quot;command&quot;: &quot;corral-hook-task-sync&quot;
+          }
+        ]
+      },
+      {
+        &quot;matcher&quot;: &quot;&quot;,
+        &quot;hooks&quot;: [
+          {
+            &quot;type&quot;: &quot;command&quot;,
+            &quot;command&quot;: &quot;corral-hook-agentic-state&quot;
+          }
+        ]
+      }
+    ],
+    &quot;Stop&quot;: [
+      {
+        &quot;matcher&quot;: &quot;&quot;,
+        &quot;hooks&quot;: [
+          {
+            &quot;type&quot;: &quot;command&quot;,
+            &quot;command&quot;: &quot;corral-hook-agentic-state&quot;
+          }
+        ]
+      }
+    ],
+    &quot;Notification&quot;: [
+      {
+        &quot;matcher&quot;: &quot;&quot;,
+        &quot;hooks&quot;: [
+          {
+            &quot;type&quot;: &quot;command&quot;,
+            &quot;command&quot;: &quot;corral-hook-agentic-state&quot;
+          }
+        ]
+      }
+    ]
+}
+</code></pre>
+<p>See <a href="../live-sessions/">Live Sessions</a> for how hook-reported events appear in the Activity timeline.</p>
+<hr />
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>!!! note "Split lines"
+    Long PULSE tags can be split across multiple lines by terminal wrapping (e.g., a 200-character status line in an 80-column terminal). Corral handles this automatically via <code>_rejoin_pulse_lines()</code>, which reassembles fragments before parsing. However, extremely long payloads that span more than 5 continuation lines are dropped to avoid false matches. Keep STATUS under 60 characters and SUMMARY under 120 characters to stay well within limits.</p>
+<p><strong>Common issues:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dashboard shows "Idle" indefinitely</td>
+<td>Agent not emitting STATUS tags</td>
+<td>Verify the protocol is in the agent's system prompt</td>
+</tr>
+<tr>
+<td>Goal line is empty</td>
+<td>No SUMMARY emitted</td>
+<td>Ensure the agent emits SUMMARY after its first message</td>
+</tr>
+<tr>
+<td>PULSE events not appearing</td>
+<td>Log file not being written</td>
+<td>Check that <code>tmux pipe-pane</code> is active (<code>tmux show -p pipe-pane</code>)</td>
+</tr>
+<tr>
+<td>Confidence events missing</td>
+<td>Agent only emitting on routine actions</td>
+<td>CONFIDENCE is optional; only emitted when uncertainty is relevant</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
