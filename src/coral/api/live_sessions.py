@@ -1066,6 +1066,18 @@ async def clear_agent_events(name: str, session_id: str | None = None):
     return {"ok": True}
 
 
+@router.post("/api/sessions/live/{name}/acknowledge")
+async def acknowledge_session(name: str, session_id: str | None = None):
+    """Insert an 'acknowledge' event so the session no longer appears as done."""
+    await store.insert_agent_event(
+        agent_name=name,
+        event_type="acknowledge",
+        summary="Session acknowledged",
+        session_id=session_id,
+    )
+    return {"ok": True}
+
+
 # ── Team Sleep/Wake ────────────────────────────────────────────────────────
 
 
