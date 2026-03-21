@@ -9,3 +9,9 @@ site/
 .claude/scheduled_tasks.lock
 .claude/settings.local.json
 excluded_files/
+
+# Xcode / Swift
+macos/CoralApp/.build/
+macos/CoralApp/xcuserdata/
+macos/CoralApp/CoralApp.xcodeproj/xcuserdata/
+*.xcuserstate
