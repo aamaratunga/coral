@@ -94,41 +94,56 @@ async def _build_session_list(include_commands: bool = False) -> list[dict]:
     """Build the enriched session list used by both REST and WebSocket endpoints."""
     import time as _time
     _t0 = _time.monotonic()
-    agents = await discover_coral_agents()
-    git_state = await store.get_all_latest_git_state()
-    file_counts = await store.get_all_changed_file_counts()
+
+    # Phase 1: Run independent queries in parallel.
+    # discover_coral_agents, git_state, file_counts, board data are all independent.
+    async def _safe_board_subs():
+        try:
+            return await board_store.get_all_subscriptions()
+        except Exception:
+            return {}
+
+    async def _safe_board_unread():
+        try:
+            return await board_store.get_all_unread_counts()
+        except Exception:
+            return {}
+
+    (agents, git_state, file_counts, board_subs, all_unread) = await asyncio.gather(
+        discover_coral_agents(),
+        store.get_all_latest_git_state(),
+        store.get_all_changed_file_counts(),
+        _safe_board_subs(),
+        _safe_board_unread(),
+    )
+
+    # Phase 2: Queries that depend on session_ids — run in parallel.
     session_ids = [a["session_id"] for a in agents if a.get("session_id")]
-    display_names = await store.get_display_names(session_ids)
-    icons = await store.get_icons(session_ids)
-    latest_events = await store.get_latest_event_types(session_ids)
-    latest_goals = await store.get_latest_goals(session_ids)
 
-    try:
-        board_subs = await board_store.get_all_subscriptions()
-    except Exception:
-        board_subs = {}
+    async def _fetch_live_board_data():
+        live_board_names: dict[str, tuple[str, str]] = {}
+        live_sleeping: dict[str, bool] = {}
+        try:
+            conn = await store._get_conn()
+            rows = await (await conn.execute(
+                "SELECT session_id, board_name, display_name, is_sleeping FROM live_sessions WHERE board_name IS NOT NULL"
+            )).fetchall()
+            for row in rows:
+                live_board_names[row["session_id"]] = (row["board_name"], row["display_name"] or "")
+                live_sleeping[row["session_id"]] = bool(row["is_sleeping"])
+        except Exception:
+            pass
+        return live_board_names, live_sleeping
 
-    # Fallback: fetch board_name from live_sessions DB for agents not yet
-    # subscribed (race condition during team launch — the async
-    # setup_board_and_prompt task may not have completed yet).
-    live_board_names: dict[str, tuple[str, str]] = {}
-    live_sleeping: dict[str, bool] = {}
-    try:
-        conn = await store._get_conn()
-        rows = await (await conn.execute(
-            "SELECT session_id, board_name, display_name, is_sleeping FROM live_sessions WHERE board_name IS NOT NULL"
-        )).fetchall()
-        for row in rows:
-            live_board_names[row["session_id"]] = (row["board_name"], row["display_name"] or "")
-            live_sleeping[row["session_id"]] = bool(row["is_sleeping"])
-    except Exception:
-        pass
+    (display_names, icons, latest_events, latest_goals, _live_board_result) = await asyncio.gather(
+        store.get_display_names(session_ids),
+        store.get_icons(session_ids),
+        store.get_latest_event_types(session_ids),
+        store.get_latest_goals(session_ids),
+        _fetch_live_board_data(),
+    )
 
-    # Batch fetch all unread counts in one pass (eliminates N+1 queries)
-    try:
-        all_unread = await board_store.get_all_unread_counts()
-    except Exception:
-        all_unread = {}
+    live_board_names, live_sleeping = _live_board_result
 
     results = []
     for agent in agents:

@@ -6,9 +6,16 @@ import asyncio
 import os
 import platform
 import shutil
+import time
 from typing import Any
 
 from coral.tools.utils import run_cmd
+
+# TTL cache for list_tmux_sessions() — avoids spawning `tmux list-panes`
+# on every WebSocket tick and every _find_pane() call.
+_tmux_cache: list[dict[str, str]] | None = None
+_tmux_cache_time: float = 0.0
+_TMUX_CACHE_TTL: float = 1.0  # seconds
 
 # Bracket paste mode escape sequences (ESC [ 200 ~ and ESC [ 201 ~)
 _BRACKET_PASTE_START = ["-H", "1b", "-H", "5b", "-H", "32", "-H", "30", "-H", "30", "-H", "7e"]
@@ -30,13 +37,25 @@ async def _send_bracket_pasted(target: str, text: str) -> str | None:
 
 
 async def list_tmux_sessions() -> list[dict[str, str]]:
-    """List all tmux panes with their titles, session names, and targets."""
+    """List all tmux panes with their titles, session names, and targets.
+
+    Results are cached for up to 1 second to avoid spawning a subprocess
+    on every WebSocket tick or _find_pane() call.
+    """
+    global _tmux_cache, _tmux_cache_time
+
+    now = time.monotonic()
+    if _tmux_cache is not None and (now - _tmux_cache_time) < _TMUX_CACHE_TTL:
+        return _tmux_cache
+
     try:
         rc, stdout, _ = await run_cmd(
             "tmux", "list-panes", "-a",
             "-F", "#{pane_title}|#{session_name}|#S:#I.#P|#{pane_current_path}",
         )
         if rc != 0:
+            _tmux_cache = []
+            _tmux_cache_time = now
             return []
 
         results = []
@@ -49,8 +68,12 @@ async def list_tmux_sessions() -> list[dict[str, str]]:
                     "target": parts[2],
                     "current_path": parts[3],
                 })
+        _tmux_cache = results
+        _tmux_cache_time = now
         return results
     except (OSError, FileNotFoundError):
+        _tmux_cache = []
+        _tmux_cache_time = now
         return []
 
 

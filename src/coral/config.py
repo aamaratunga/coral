@@ -27,14 +27,14 @@ INDEXER_STARTUP_DELAY_S = 30       # Seconds before first indexer pass
 
 # ── Background task intervals (seconds) ──────────────────────────────────
 INDEXER_INTERVAL_S = 120           # Session indexer re-scan interval
-GIT_POLLER_INTERVAL_S = 120        # Git snapshot polling interval
+GIT_POLLER_INTERVAL_S = 30         # Git snapshot polling interval
 WEBHOOK_DISPATCHER_INTERVAL_S = 15 # Webhook delivery retry interval
 IDLE_DETECTOR_INTERVAL_S = 60      # Idle agent detection interval
 BOARD_NOTIFIER_INTERVAL_S = 5      # Message board notification interval
 REMOTE_POLLER_INTERVAL_S = 5       # Remote board polling interval
 WAL_CHECKPOINT_INTERVAL_S = 300    # Periodic WAL checkpoint (5 minutes)
 # ── WebSocket ────────────────────────────────────────────────────────────
-WS_POLL_INTERVAL_S = 5            # Dashboard WebSocket refresh interval
+WS_POLL_INTERVAL_S = 2            # Dashboard WebSocket refresh interval
 
 # ── Message board (frontend) ────────────────────────────────────────────
 BOARD_PAGE_SIZE = 50               # Messages per page in board UI
