@@ -70,21 +70,22 @@ struct SessionDetailView: View {
                 CommandInputView(session: session)
             }
         }
-        .onChange(of: session.id) { _, _ in
-            if session.agentType == "terminal" {
-                isLocalTerminated = false
-                localTerminalGeneration += 1
-            } else {
-                connectTerminal()
-            }
-        }
         .onAppear {
             if session.agentType != "terminal" {
                 connectTerminal()
             }
         }
-        .onDisappear {
-            terminalWS.disconnect()
+        .onChange(of: store.selectedSessionId) { _, newId in
+            guard session.agentType != "terminal" else { return }
+            if newId == session.id {
+                // Re-selected — reconnect WebSocket
+                if !terminalWS.isConnected {
+                    connectTerminal()
+                }
+            } else {
+                // Deselected — disconnect to save resources
+                terminalWS.disconnect()
+            }
         }
     }
 
