@@ -662,12 +662,6 @@ async def restart_session(
             "tmux", "pipe-pane", "-t", target, "-o", f"cat >> '{new_log_file}'"
         )
 
-        # 5. Restore the pane title
-        folder_name = os.path.basename(working_dir.rstrip("/")) if working_dir else agent_name
-        await run_cmd(
-            "tmux", "send-keys", "-t", target,
-            f"printf '\\033]2;{folder_name} \\xe2\\x80\\x94 {effective_type}\\033\\\\'", "Enter",
-        )
         await asyncio.sleep(0.3)
 
         # 6. Load persisted flags, prompt, board_name, board_server, and board_type from the live session record
@@ -836,12 +830,6 @@ async def launch_claude_session(working_dir: str, agent_type: str = "claude", di
         # Set up pipe-pane logging
         await run_cmd(
             "tmux", "pipe-pane", "-t", session_name, "-o", f"cat >> '{log_file}'"
-        )
-
-        # Set pane title
-        await run_cmd(
-            "tmux", "send-keys", "-t", f"{session_name}.0",
-            f"printf '\\033]2;{folder_name} \\xe2\\x80\\x94 {agent_type}\\033\\\\'", "Enter"
         )
 
         await asyncio.sleep(0.3)

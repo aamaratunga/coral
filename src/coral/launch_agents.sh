@@ -130,7 +130,7 @@ if [ "$LAUNCH_AGENTS" = "agents" ]; then
         tmux pipe-pane -t "${session_name}" -o "cat >> '${log_file}'"
 
         # Pane 0: agent (with PROTOCOL.md piped in as system prompt if available)
-        tmux send-keys -t "${session_name}.0" "printf '\033]2;${folder_name} — ${AGENT_TYPE}\033\\\\'" Enter
+        # Pane title is set via tmux directly (no shell printf noise)
         if [ "$AGENT_TYPE" == "gemini" ]; then
             if [ -f "$PROTOCOL_PATH" ]; then
                 tmux send-keys -t "${session_name}.0" "GEMINI_SYSTEM_MD=\"${PROTOCOL_PATH}\" gemini" Enter
