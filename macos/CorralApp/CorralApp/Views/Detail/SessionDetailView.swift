@@ -148,7 +148,7 @@ struct SessionDetailView: View {
 
     private var detachedOverlay: some View {
         VStack(spacing: 12) {
-            Image(systemName: "rectangle.disconnect")
+            Image(systemName: "rectangle.badge.xmark")
                 .font(.largeTitle)
                 .foregroundStyle(.secondary)
             Text("Session Detached")
