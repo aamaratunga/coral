@@ -37,6 +37,16 @@ final class SessionStore {
     /// Active worktree deletion states, keyed by folder path.
     var activeDeletions: [String: WorktreeDeletionState] = [:]
 
+    /// Active session launch states, keyed by placeholder session ID.
+    var activeLaunches: [String: SessionLaunchState] = [:]
+
+    /// Active session restart states, keyed by original session ID.
+    var activeRestarts: [String: SessionRestartState] = [:]
+
+    /// Session IDs that were optimistically removed (pending server-side kill).
+    /// Prevents handleDiff from re-adding them before the removal diff arrives.
+    private var pendingKills: Set<String> = []
+
     // MARK: - Ordering State (persisted via UserDefaults)
 
     /// Ordered array of workingDirectory paths.
@@ -122,8 +132,24 @@ final class SessionStore {
         return nil
     }
 
+    /// The launch state for the currently selected placeholder, if any.
+    var selectedLaunchState: SessionLaunchState? {
+        guard let id = selectedSessionId else { return nil }
+        return activeLaunches[id]
+    }
+
+    /// The restart state for the currently selected session, if any.
+    var selectedRestartState: SessionRestartState? {
+        guard let id = selectedSessionId else { return nil }
+        return activeRestarts[id]
+    }
+
     func isDeleting(folderPath: String) -> Bool {
         activeDeletions[folderPath] != nil
+    }
+
+    func isRestarting(sessionId: String) -> Bool {
+        activeRestarts[sessionId] != nil
     }
 
     // MARK: - Ordered Groups
@@ -276,19 +302,161 @@ final class SessionStore {
     }
 
     func launchSession(agentType: String, in workingDir: String) {
-        let request = LaunchRequest(workingDir: workingDir, agentType: agentType)
-        Task {
-            do {
-                let response = try await apiClient.launchAgent(request)
-                selectedSessionId = response.sessionId
-            } catch {
-                logger.error("Failed to launch \(agentType): \(error)")
-            }
-        }
+        let state = SessionLaunchState(workingDirectory: workingDir, agentType: agentType)
+
+        // Create placeholder session
+        var placeholder = Session(
+            name: state.id,
+            agentType: agentType,
+            sessionId: state.id,
+            workingDirectory: workingDir,
+            working: true
+        )
+        placeholder.isPlaceholder = true
+
+        sessions.append(placeholder)
+        activeLaunches[state.id] = state
+        reconcileOrder()
+
+        // Select the placeholder and ensure its folder + section are expanded
+        selectedSessionId = state.id
+        folderExpansion[workingDir] = true
+        let status = folderStatus[workingDir] ?? .inProgress
+        sectionExpansion[status] = true
+
+        Task { await performLaunch(state: state) }
     }
 
     func launchTerminal(in workingDir: String) {
         launchSession(agentType: "terminal", in: workingDir)
+    }
+
+    private func performLaunch(state: SessionLaunchState) async {
+        let request = LaunchRequest(workingDir: state.workingDirectory, agentType: state.agentType)
+        do {
+            let response = try await apiClient.launchAgent(request)
+            state.realSessionId = response.sessionId
+            state.isFinished = true
+            // If the real session already arrived via WS (unlikely), swap now
+            if sessions.contains(where: { $0.id == response.sessionId }) {
+                replaceLaunchPlaceholder(placeholderId: state.id, realSessionId: response.sessionId)
+            }
+            // Otherwise, handleDiff will do the swap when the session arrives
+        } catch {
+            state.error = error.localizedDescription
+            handleLaunchFailure(state: state)
+        }
+    }
+
+    /// Swaps a launch placeholder session for the real session once it arrives.
+    private func replaceLaunchPlaceholder(placeholderId: String, realSessionId: String) {
+        sessions.removeAll { $0.id == placeholderId }
+        if selectedSessionId == placeholderId {
+            selectedSessionId = realSessionId
+        }
+        activeLaunches.removeValue(forKey: placeholderId)
+        reconcileOrder()
+    }
+
+    /// Cleans up after a failed session launch.
+    private func handleLaunchFailure(state: SessionLaunchState) {
+        sessions.removeAll { $0.id == state.id }
+        if selectedSessionId == state.id {
+            selectedSessionId = nil
+        }
+        activeLaunches.removeValue(forKey: state.id)
+        reconcileOrder()
+
+        let alert = NSAlert()
+        alert.messageText = "Session Launch Failed"
+        alert.informativeText = state.error ?? "An unknown error occurred."
+        alert.alertStyle = .critical
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
+    }
+
+    // MARK: - Optimistic Kill
+
+    func removeSessionOptimistically(_ session: Session) {
+        // Move selection to next/prev session in same folder before removing
+        if selectedSessionId == session.id {
+            if let group = orderedGroups.first(where: { $0.path == session.workingDirectory }) {
+                let siblings = group.sessions.filter { $0.id != session.id && !$0.isPlaceholder }
+                if let idx = group.sessions.firstIndex(where: { $0.id == session.id }) {
+                    // Prefer next session, fall back to previous
+                    let next = group.sessions[safe: idx + 1].flatMap { s in siblings.contains(where: { $0.id == s.id }) ? s : nil }
+                    let prev = (idx > 0 ? group.sessions[safe: idx - 1] : nil).flatMap { s in siblings.contains(where: { $0.id == s.id }) ? s : nil }
+                    selectedSessionId = next?.id ?? prev?.id
+                } else {
+                    selectedSessionId = siblings.first?.id
+                }
+            } else {
+                selectedSessionId = nil
+            }
+        }
+
+        pendingKills.insert(session.id)
+        sessions.removeAll { $0.id == session.id }
+        NotificationManager.shared.clearSession(session.id)
+        reconcileOrder()
+    }
+
+    // MARK: - Restart
+
+    func restartSession(_ session: Session) {
+        let state = SessionRestartState(originalSession: session)
+        activeRestarts[session.id] = state
+        Task { await performRestart(state: state) }
+    }
+
+    private func performRestart(state: SessionRestartState) async {
+        let session = state.originalSession
+
+        // Phase 1: Kill the session
+        state.phase = .killing
+        do {
+            try await apiClient.killSession(
+                sessionName: session.name,
+                agentType: session.agentType,
+                sessionId: session.sessionId
+            )
+        } catch {
+            state.error = error.localizedDescription
+            handleRestartFailure(state: state)
+            return
+        }
+
+        // Phase 2: Launch a new session
+        state.phase = .launching
+        let request = LaunchRequest(
+            workingDir: session.workingDirectory,
+            agentType: session.agentType,
+            displayName: session.displayName
+        )
+        do {
+            let response = try await apiClient.launchAgent(request)
+            state.isFinished = true
+
+            // Transfer selection to the new session
+            if selectedSessionId == state.id {
+                selectedSessionId = response.sessionId
+            }
+            activeRestarts.removeValue(forKey: state.id)
+        } catch {
+            state.error = error.localizedDescription
+            handleRestartFailure(state: state)
+        }
+    }
+
+    private func handleRestartFailure(state: SessionRestartState) {
+        activeRestarts.removeValue(forKey: state.id)
+
+        let alert = NSAlert()
+        alert.messageText = "Session Restart Failed"
+        alert.informativeText = state.error ?? "An unknown error occurred."
+        alert.alertStyle = .critical
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
     }
 
     // MARK: - Move Handlers
@@ -367,8 +535,10 @@ final class SessionStore {
             uniquingKeysWith: { _, last in last }
         )
 
-        // Save active placeholder sessions before replacing
-        let activePlaceholders = sessions.filter { $0.isPlaceholder && activeCreations[$0.id] != nil }
+        // Save active placeholder sessions before replacing (worktree creation + session launch)
+        let activePlaceholders = sessions.filter {
+            $0.isPlaceholder && (activeCreations[$0.id] != nil || activeLaunches[$0.id] != nil)
+        }
 
         // Save sessions in folders being deleted before replacing
         let deletingSessions = sessions.filter { activeDeletions[$0.workingDirectory] != nil }
@@ -394,6 +564,7 @@ final class SessionStore {
             sessions.append(session)
         }
 
+        pendingKills.removeAll()
         reconcileOrder()
         isConnected = true
         logger.info("Full update: \(self.sessions.count) sessions")
@@ -405,9 +576,10 @@ final class SessionStore {
     func handleDiff(changed: [Session], removed: [String]) {
         // Apply removals — but never remove placeholder sessions
         if !removed.isEmpty {
-            // Clear notification tracking for removed sessions
+            // Clear notification tracking and pending kills for removed sessions
             for id in removed {
                 NotificationManager.shared.clearSession(id)
+                pendingKills.remove(id)
             }
 
             sessions.removeAll { session in
@@ -416,12 +588,13 @@ final class SessionStore {
                 return removed.contains(session.sessionId) || removed.contains(session.name)
             }
             // Clear selection if the selected session was removed
-            // (but not if it's in a folder being deleted — we kept those sessions)
+            // (but not if it's in a folder being deleted or being restarted)
             if let selectedId = selectedSessionId,
                removed.contains(selectedId) || sessions.first(where: { $0.id == selectedId }) == nil {
                 let isInDeletingFolder = sessions.first(where: { $0.id == selectedId })
                     .map { activeDeletions[$0.workingDirectory] != nil } ?? false
-                if !isInDeletingFolder {
+                let isBeingRestarted = activeRestarts[selectedId] != nil
+                if !isInDeletingFolder && !isBeingRestarted {
                     selectedSessionId = nil
                 }
             }
@@ -445,6 +618,8 @@ final class SessionStore {
                 sessions[idx] = updated
                 NotificationManager.shared.evaluateTransition(old: oldSession, new: updated)
             } else {
+                // Don't re-add sessions that were optimistically killed
+                guard !pendingKills.contains(change.id) else { continue }
                 // Only append if not already present (guard against duplicates)
                 if !sessions.contains(where: { $0.id == change.id }) {
                     sessions.append(change)
@@ -452,10 +627,29 @@ final class SessionStore {
                 }
             }
 
-            // Check if this new session matches a finished placeholder (by workingDirectory)
+            // Check if this new session matches a finished worktree creation placeholder
             for (placeholderId, creation) in activeCreations {
                 if creation.isFinished && change.workingDirectory == creation.worktreePath {
                     replacePlaceholder(placeholderId: placeholderId, realSessionId: change.id)
+                    break
+                }
+            }
+
+            // Check if this new session matches a finished launch placeholder
+            for (placeholderId, launch) in activeLaunches {
+                if let realId = launch.realSessionId, change.id == realId {
+                    replaceLaunchPlaceholder(placeholderId: placeholderId, realSessionId: change.id)
+                    break
+                }
+            }
+
+            // Check if this new session matches a finished restart
+            for (originalId, restart) in activeRestarts {
+                if restart.isFinished && change.workingDirectory == restart.originalSession.workingDirectory {
+                    if selectedSessionId == originalId {
+                        selectedSessionId = change.id
+                    }
+                    activeRestarts.removeValue(forKey: originalId)
                     break
                 }
             }
@@ -911,5 +1105,13 @@ final class SessionStore {
         } catch {
             logger.warning("Failed to fetch commands: \(error)")
         }
+    }
+}
+
+// MARK: - Safe Array Subscript
+
+private extension Array {
+    subscript(safe index: Index) -> Element? {
+        indices.contains(index) ? self[index] : nil
     }
 }

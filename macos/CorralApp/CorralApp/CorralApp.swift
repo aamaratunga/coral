@@ -69,6 +69,7 @@ struct CorralApp: App {
 
                 Button("Kill Session") {
                     if let session = sessionStore.selectedSession {
+                        sessionStore.removeSessionOptimistically(session)
                         Task {
                             try? await sessionStore.apiClient.killSession(
                                 sessionName: session.name,

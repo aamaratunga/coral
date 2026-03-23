@@ -18,11 +18,15 @@ struct ContentView: View {
                         .allowsHitTesting(isSelected)
                 }
 
-                // Overlay creation/deletion progress or empty state on top
+                // Overlay creation/deletion/launch/restart progress or empty state on top
                 if let deletionState = store.selectedDeletionState {
                     WorktreeDeletionProgressView(state: deletionState)
                 } else if let creationState = store.selectedCreationState {
                     WorktreeCreationProgressView(state: creationState)
+                } else if let restartState = store.selectedRestartState {
+                    SessionRestartProgressView(state: restartState)
+                } else if let launchState = store.selectedLaunchState {
+                    SessionLaunchProgressView(state: launchState)
                 } else if store.selectedSession == nil {
                     ContentUnavailableView {
                         Label("No Session Selected", systemImage: "terminal")

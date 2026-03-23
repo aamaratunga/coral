@@ -329,6 +329,8 @@ struct SessionListView: View {
             placeholderRow(for: session)
         } else if store.isDeleting(folderPath: folderPath) {
             deletingRow(for: session)
+        } else if store.isRestarting(sessionId: session.id) {
+            restartingRow(for: session)
         } else {
             realSessionRow(for: session, in: folderPath)
         }
@@ -374,6 +376,37 @@ struct SessionListView: View {
                 .controlSize(.mini)
 
             Text("Removing…")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+
+            Spacer()
+        }
+        .padding(.vertical, 3)
+        .padding(.horizontal, 5)
+        .padding(.leading, 36)
+        .background(
+            RoundedRectangle(cornerRadius: 6)
+                .fill(isSelected ? Color.primary.opacity(0.08) : Color.clear)
+        )
+        .opacity(0.75)
+        .contentShape(Rectangle())
+        .listRowInsets(EdgeInsets(top: -1, leading: 0, bottom: -1, trailing: 8))
+        .listRowSeparator(.hidden)
+        .onTapGesture {
+            store.selectedSessionId = session.id
+        }
+    }
+
+    @ViewBuilder
+    private func restartingRow(for session: Session) -> some View {
+        let isSelected = store.selectedSessionId == session.id
+
+        HStack(spacing: 8) {
+            ProgressView()
+                .controlSize(.mini)
+
+            Text("Restarting\u{2026}")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .lineLimit(1)
@@ -564,16 +597,11 @@ struct SessionListView: View {
         Divider()
 
         Button("Restart") {
-            Task {
-                try? await store.apiClient.restartSession(
-                    sessionName: session.name,
-                    agentType: session.agentType,
-                    sessionId: session.sessionId
-                )
-            }
+            store.restartSession(session)
         }
 
         Button("Kill", role: .destructive) {
+            store.removeSessionOptimistically(session)
             Task {
                 try? await store.apiClient.killSession(
                     sessionName: session.name,
