@@ -325,10 +325,10 @@ struct SessionListView: View {
 
     @ViewBuilder
     private func sessionRow(for session: Session, in folderPath: String) -> some View {
-        if session.isPlaceholder {
-            placeholderRow(for: session)
-        } else if store.isDeleting(folderPath: folderPath) {
+        if store.isDeleting(folderPath: folderPath) {
             deletingRow(for: session)
+        } else if session.isPlaceholder {
+            placeholderRow(for: session)
         } else if store.isRestarting(sessionId: session.id) {
             restartingRow(for: session)
         } else {

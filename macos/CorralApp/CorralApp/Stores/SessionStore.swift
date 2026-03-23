@@ -261,10 +261,11 @@ final class SessionStore {
             }
 
             guard !Task.isCancelled else { return }
-            await MainActor.run {
+            let discovered = allDiscovered
+            await MainActor.run { [weak self, discovered] in
                 guard let self, !Task.isCancelled else { return }
-                if self.discoveredFolders != allDiscovered {
-                    self.discoveredFolders = allDiscovered
+                if self.discoveredFolders != discovered {
+                    self.discoveredFolders = discovered
                     self.saveDiscoveredFolders()
                     self.reconcileOrder()
                 }
@@ -822,11 +823,21 @@ final class SessionStore {
 
         activeDeletions[folderPath] = state
 
-        // Select the first session in the folder (or the folder path itself) and ensure visible
+        // Select the first session in the folder and ensure visible
         if let first = sessionsInFolder.first {
             selectedSessionId = first.id
         } else {
-            selectedSessionId = folderPath
+            // No sessions — create a placeholder so the sidebar shows a "Removing..." row
+            var placeholder = Session(
+                name: "deleting-\(folderPath)",
+                sessionId: "deleting-\(folderPath)",
+                workingDirectory: folderPath,
+                working: false
+            )
+            placeholder.isPlaceholder = true
+            sessions.append(placeholder)
+            reconcileOrder()
+            selectedSessionId = placeholder.id
         }
         folderExpansion[folderPath] = true
         let status = folderStatus[folderPath] ?? .inProgress
@@ -840,8 +851,8 @@ final class SessionStore {
         let folderPath = state.folderPath
         logger.info("deleteWorktree: starting for \(folderPath)")
 
-        // Step 1: Kill all sessions in this folder
-        let sessionsInFolder = sessions.filter { $0.workingDirectory == folderPath }
+        // Step 1: Kill all real sessions in this folder (exclude placeholders)
+        let sessionsInFolder = sessions.filter { $0.workingDirectory == folderPath && !$0.isPlaceholder }
         logger.info("deleteWorktree: found \(sessionsInFolder.count) sessions to kill")
 
         if sessionsInFolder.isEmpty {

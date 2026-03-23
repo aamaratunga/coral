@@ -11,7 +11,7 @@ struct ContentView: View {
         } detail: {
             ZStack {
                 // Keep visited session views alive so terminal state persists
-                ForEach(store.sessions.filter { visitedSessionIds.contains($0.id) }) { session in
+                ForEach(store.sessions.filter { visitedSessionIds.contains($0.id) && !$0.isPlaceholder }) { session in
                     let isSelected = session.id == store.selectedSessionId
                     SessionDetailView(session: session)
                         .opacity(isSelected ? 1 : 0)
