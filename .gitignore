@@ -11,7 +11,7 @@ site/
 excluded_files/
 
 # Xcode / Swift
-macos/CorralApp/.build/
-macos/CorralApp/xcuserdata/
-macos/CorralApp/CorralApp.xcodeproj/xcuserdata/
+macos/CoralApp/.build/
+macos/CoralApp/xcuserdata/
+macos/CoralApp/CoralApp.xcodeproj/xcuserdata/
 *.xcuserstate

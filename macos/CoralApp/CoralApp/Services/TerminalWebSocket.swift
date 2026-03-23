@@ -7,7 +7,7 @@ final class TerminalWebSocket {
     private var urlSession: URLSession
     private var port: Int
     private var generation = 0
-    private let logger = Logger(subsystem: "com.corral.app", category: "TerminalWebSocket")
+    private let logger = Logger(subsystem: "com.coral.app", category: "TerminalWebSocket")
 
     var isConnected: Bool { webSocketTask != nil }
 

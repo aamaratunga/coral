@@ -1,7 +1,7 @@
 import Foundation
 import os
 
-/// Manages the lifecycle of the bundled Python Corral server.
+/// Manages the lifecycle of the bundled Python Coral server.
 ///
 /// On launch, starts the server as a subprocess and polls `/api/system/status`
 /// until `startup_complete` is true. On app quit, terminates the process.
@@ -13,7 +13,7 @@ final class ServerManager {
 
     private var serverProcess: Process?
     private var healthCheckTask: Task<Void, Never>?
-    private let logger = Logger(subsystem: "com.corral.app", category: "ServerManager")
+    private let logger = Logger(subsystem: "com.coral.app", category: "ServerManager")
 
     /// Whether we're running with a bundled server or connecting to an external one.
     enum Mode {

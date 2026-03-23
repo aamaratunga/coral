@@ -1,5 +1,5 @@
 import XCTest
-@testable import Corral
+@testable import Coral
 
 final class SessionTests: XCTestCase {
 

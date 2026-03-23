@@ -10,7 +10,7 @@ struct LoadingView: View {
                 .foregroundStyle(.tint)
                 .symbolEffect(.pulse, options: .repeating)
 
-            Text("Corral")
+            Text("Coral")
                 .font(.largeTitle)
                 .fontWeight(.semibold)
 

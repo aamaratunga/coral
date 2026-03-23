@@ -13,12 +13,12 @@ let coralJSONDecoder: JSONDecoder = {
 }()
 
 /// Connects to `/ws/coral` and streams live session updates via diff merging.
-final class CorralWebSocket {
+final class CoralWebSocket {
     private var webSocketTask: URLSessionWebSocketTask?
     private var urlSession: URLSession
     private var port: Int
     private var generation = 0
-    private let logger = Logger(subsystem: "com.corral.app", category: "CorralWebSocket")
+    private let logger = Logger(subsystem: "com.coral.app", category: "CoralWebSocket")
 
     var onFullUpdate: (([Session]) -> Void)?
     var onDiff: ((_ changed: [Session], _ removed: [String]) -> Void)?

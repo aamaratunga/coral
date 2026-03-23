@@ -200,7 +200,7 @@ struct SessionListView: View {
                 Text("This will kill all sessions, run the pre-delete script, and remove the worktree at:\n\(URL(fileURLWithPath: path).lastPathComponent)")
             }
         }
-        .navigationTitle("Corral")
+        .navigationTitle("Coral")
         .toolbar {
             ToolbarItem(placement: .status) {
                 HStack(spacing: 4) {

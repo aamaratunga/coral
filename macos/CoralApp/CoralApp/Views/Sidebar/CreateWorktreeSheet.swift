@@ -5,7 +5,7 @@ struct CreateWorktreeDropdown: View {
     @Environment(SessionStore.self) private var store
     @Environment(\.openSettings) private var openSettings
 
-    private let logger = Logger(subsystem: "com.corral.app", category: "CreateWorktree")
+    private let logger = Logger(subsystem: "com.coral.app", category: "CreateWorktree")
 
     @FocusState private var focusedField: Field?
     @State private var selectedConfig: RepoConfig?
