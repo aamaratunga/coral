@@ -302,6 +302,35 @@ final class SessionStore {
         folderOrder.move(fromOffsets: IndexSet(integer: fromIndex), toOffset: offset)
     }
 
+    // MARK: - Rename
+
+    func renameSession(_ session: Session, to newName: String) {
+        let trimmed = newName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+
+        guard let idx = sessions.firstIndex(where: { $0.id == session.id }) else { return }
+        let originalName = sessions[idx].displayName
+
+        // Optimistic update
+        sessions[idx].displayName = trimmed
+
+        Task {
+            do {
+                try await apiClient.setDisplayName(
+                    sessionName: session.name,
+                    sessionId: session.sessionId,
+                    displayName: trimmed
+                )
+            } catch {
+                // Rollback on failure
+                if let idx = sessions.firstIndex(where: { $0.id == session.id }) {
+                    sessions[idx].displayName = originalName
+                }
+                logger.error("Failed to rename session: \(error)")
+            }
+        }
+    }
+
     // MARK: - Diff Merge (mirrors websocket.js logic)
 
     func handleFullUpdate(_ newSessions: [Session]) {

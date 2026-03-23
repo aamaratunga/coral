@@ -2,6 +2,12 @@ import SwiftUI
 
 struct SessionRowView: View {
     let session: Session
+    var isEditing: Bool = false
+    var onRename: (String) -> Void = { _ in }
+    var onCancelRename: () -> Void = {}
+
+    @State private var editText: String = ""
+    @FocusState private var isTextFieldFocused: Bool
 
     var body: some View {
         HStack(spacing: 8) {
@@ -14,9 +20,33 @@ struct SessionRowView: View {
                             .font(.callout)
                     }
 
-                    Text(session.displayLabel)
-                        .font(.headline)
-                        .lineLimit(1)
+                    if isEditing {
+                        TextField("Name", text: $editText)
+                            .font(.headline)
+                            .textFieldStyle(.plain)
+                            .focused($isTextFieldFocused)
+                            .onSubmit {
+                                let trimmed = editText.trimmingCharacters(in: .whitespacesAndNewlines)
+                                if trimmed.isEmpty || trimmed == session.displayLabel {
+                                    onCancelRename()
+                                } else {
+                                    onRename(trimmed)
+                                }
+                            }
+                            .onExitCommand {
+                                onCancelRename()
+                            }
+                            .onAppear {
+                                editText = session.displayLabel
+                                DispatchQueue.main.async {
+                                    isTextFieldFocused = true
+                                }
+                            }
+                    } else {
+                        Text(session.displayLabel)
+                            .font(.headline)
+                            .lineLimit(1)
+                    }
                 }
 
                 if let status = session.status, !status.isEmpty {

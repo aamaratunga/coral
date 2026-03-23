@@ -128,6 +128,25 @@ struct APIClient {
         }
     }
 
+    // MARK: - Display Name
+
+    func setDisplayName(sessionName: String, sessionId: String, displayName: String) async throws {
+        let encodedName = sessionName.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? sessionName
+        let url = baseURL.appendingPathComponent("/api/sessions/live/\(encodedName)/display-name")
+
+        let body: [String: Any] = ["session_id": sessionId, "display_name": displayName]
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+
+        let (_, response) = try await URLSession.shared.data(for: request)
+        guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
+            throw APIError.requestFailed
+        }
+    }
+
     // MARK: - Filesystem
 
     func listDirectory(path: String = "~") async throws -> DirectoryListing {
