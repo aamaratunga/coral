@@ -11,6 +11,8 @@
 		1974C968A6DE55F7589F6CD1 /* SwiftTerm in Frameworks */ = {isa = PBXBuildFile; productRef = 1CCA2CFCC2A378E76C2B1867 /* SwiftTerm */; };
 		2D5BA19AAC86B3560493E451 /* RepoConfigRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111FBA5CB8AA09D26FCF0E76 /* RepoConfigRow.swift */; };
 		4DEBA0E963FBCBFA6EE2D496 /* WorktreeCreationProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C59A1A5954AEE90CC23D0FE /* WorktreeCreationProgressView.swift */; };
+		A1B2C3D4E5F60718A9B0C1D2 /* WorktreeDeletionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E2F3A4B5C60718D9E0F1A2 /* WorktreeDeletionState.swift */; };
+		B2C3D4E5F6A70829BAC1D2E3 /* WorktreeDeletionProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F3A4B5C6D70829EAF0A1B2 /* WorktreeDeletionProgressView.swift */; };
 		54C4FAC2C7554571559F0853 /* SessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A9F5DCB0129477D846C1AF /* SessionStore.swift */; };
 		570BDD791069B32892DB56CA /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7708D86A36CF0BD119CCB0FB /* Session.swift */; };
 		6D2D278E804FE064A195E259 /* CorralApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74CB7947FD711C4D7A8C9D2 /* CorralApp.swift */; };
@@ -78,10 +80,12 @@
 		B29845017017D46725F7B74B /* ServerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerManager.swift; sourceTree = "<group>"; };
 		CDE46C6ACC7B71CBF1A51EE6 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		CF43DB7B691C0DDBCD4A7139 /* WorktreeCreationState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WorktreeCreationState.swift; sourceTree = "<group>"; };
+		D1E2F3A4B5C60718D9E0F1A2 /* WorktreeDeletionState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WorktreeDeletionState.swift; sourceTree = "<group>"; };
 		D85DA0A4FE767220F0A26237 /* CreateWorktreeSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateWorktreeSheet.swift; sourceTree = "<group>"; };
 		DCBB714CD30CEA29A1D0D6C9 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		DD132F4EF732FF2CEF3A3658 /* LaunchRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchRequestTests.swift; sourceTree = "<group>"; };
 		E1EF00915EEE1D52179ECEC7 /* SessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDetailView.swift; sourceTree = "<group>"; };
+		E2F3A4B5C6D70829EAF0A1B2 /* WorktreeDeletionProgressView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WorktreeDeletionProgressView.swift; sourceTree = "<group>"; };
 		E93B9203295AEF9F59AC2D53 /* WSEnvelopeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSEnvelopeTests.swift; sourceTree = "<group>"; };
 		EAE868B9229C12D2FD489CA3 /* CorralApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CorralApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F55AAB38EDDF40F138FC1A85 /* SessionRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionRowView.swift; sourceTree = "<group>"; };
@@ -132,6 +136,7 @@
 				8E802E5B6560058FFB097089 /* RepoConfig.swift */,
 				7708D86A36CF0BD119CCB0FB /* Session.swift */,
 				CF43DB7B691C0DDBCD4A7139 /* WorktreeCreationState.swift */,
+				D1E2F3A4B5C60718D9E0F1A2 /* WorktreeDeletionState.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -164,6 +169,7 @@
 				E1EF00915EEE1D52179ECEC7 /* SessionDetailView.swift */,
 				24FA37A4AAB6B4536CBF3097 /* TerminalView.swift */,
 				2C59A1A5954AEE90CC23D0FE /* WorktreeCreationProgressView.swift */,
+				E2F3A4B5C6D70829EAF0A1B2 /* WorktreeDeletionProgressView.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -343,6 +349,8 @@
 				ADC29524A8D6B9ACCAC12A1E /* TerminalWebSocket.swift in Sources */,
 				E0744C68C0568C7C82A4F68B /* WorktreeCreationState.swift in Sources */,
 				4DEBA0E963FBCBFA6EE2D496 /* WorktreeCreationProgressView.swift in Sources */,
+				A1B2C3D4E5F60718A9B0C1D2 /* WorktreeDeletionState.swift in Sources */,
+				B2C3D4E5F6A70829BAC1D2E3 /* WorktreeDeletionProgressView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -34,6 +34,9 @@ final class SessionStore {
     /// Active worktree creation states, keyed by placeholder session ID.
     var activeCreations: [String: WorktreeCreationState] = [:]
 
+    /// Active worktree deletion states, keyed by folder path.
+    var activeDeletions: [String: WorktreeDeletionState] = [:]
+
     // MARK: - Ordering State (persisted via UserDefaults)
 
     /// Ordered array of workingDirectory paths.
@@ -107,6 +110,20 @@ final class SessionStore {
     var selectedCreationState: WorktreeCreationState? {
         guard let id = selectedSessionId else { return nil }
         return activeCreations[id]
+    }
+
+    /// The deletion state for the currently selected session's folder, if any.
+    var selectedDeletionState: WorktreeDeletionState? {
+        guard let id = selectedSessionId else { return nil }
+        if let state = activeDeletions[id] { return state }
+        if let session = sessions.first(where: { $0.id == id }) {
+            return activeDeletions[session.workingDirectory]
+        }
+        return nil
+    }
+
+    func isDeleting(folderPath: String) -> Bool {
+        activeDeletions[folderPath] != nil
     }
 
     // MARK: - Ordered Groups
@@ -353,6 +370,9 @@ final class SessionStore {
         // Save active placeholder sessions before replacing
         let activePlaceholders = sessions.filter { $0.isPlaceholder && activeCreations[$0.id] != nil }
 
+        // Save sessions in folders being deleted before replacing
+        let deletingSessions = sessions.filter { activeDeletions[$0.workingDirectory] != nil }
+
         // Deduplicate by id — the server may send the same session twice
         var seen = Set<String>()
         sessions = newSessions.compactMap { session in
@@ -367,6 +387,11 @@ final class SessionStore {
         // Re-append placeholders that are still being created
         for placeholder in activePlaceholders where !sessions.contains(where: { $0.id == placeholder.id }) {
             sessions.append(placeholder)
+        }
+
+        // Re-append sessions in folders being deleted that got dropped
+        for session in deletingSessions where !sessions.contains(where: { $0.id == session.id }) {
+            sessions.append(session)
         }
 
         reconcileOrder()
@@ -387,12 +412,18 @@ final class SessionStore {
 
             sessions.removeAll { session in
                 guard !session.isPlaceholder else { return false }
+                guard activeDeletions[session.workingDirectory] == nil else { return false }
                 return removed.contains(session.sessionId) || removed.contains(session.name)
             }
             // Clear selection if the selected session was removed
+            // (but not if it's in a folder being deleted — we kept those sessions)
             if let selectedId = selectedSessionId,
                removed.contains(selectedId) || sessions.first(where: { $0.id == selectedId }) == nil {
-                selectedSessionId = nil
+                let isInDeletingFolder = sessions.first(where: { $0.id == selectedId })
+                    .map { activeDeletions[$0.workingDirectory] != nil } ?? false
+                if !isInDeletingFolder {
+                    selectedSessionId = nil
+                }
             }
         }
 
@@ -589,28 +620,56 @@ final class SessionStore {
         return nil
     }
 
-    /// Kills all sessions in the worktree, runs pre-delete script, removes worktree via git.
-    func deleteWorktree(folderPath: String) async {
+    /// Synchronous entry point: creates deletion state, starts async deletion pipeline.
+    func beginWorktreeDeletion(folderPath: String) {
+        let sessionsInFolder = sessions.filter { $0.workingDirectory == folderPath }
+        let state = WorktreeDeletionState(folderPath: folderPath, sessionCount: sessionsInFolder.count)
+
+        activeDeletions[folderPath] = state
+
+        // Select the first session in the folder (or the folder path itself) and ensure visible
+        if let first = sessionsInFolder.first {
+            selectedSessionId = first.id
+        } else {
+            selectedSessionId = folderPath
+        }
+        folderExpansion[folderPath] = true
+        let status = folderStatus[folderPath] ?? .inProgress
+        sectionExpansion[status] = true
+
+        Task { await performWorktreeDeletion(state: state) }
+    }
+
+    /// Async pipeline: kills sessions, runs pre-delete script, removes worktree, deletes branch.
+    private func performWorktreeDeletion(state: WorktreeDeletionState) async {
+        let folderPath = state.folderPath
         logger.info("deleteWorktree: starting for \(folderPath)")
 
-        // Kill all sessions in this folder
+        // Step 1: Kill all sessions in this folder
         let sessionsInFolder = sessions.filter { $0.workingDirectory == folderPath }
         logger.info("deleteWorktree: found \(sessionsInFolder.count) sessions to kill")
-        for session in sessionsInFolder {
-            logger.info("deleteWorktree: killing session \(session.name) (id=\(session.sessionId), type=\(session.agentType))")
-            try? await apiClient.killSession(
-                sessionName: session.name,
-                agentType: session.agentType,
-                sessionId: session.sessionId
-            )
+
+        if sessionsInFolder.isEmpty {
+            state.skipStep(.killingSessions)
+        } else {
+            state.advance(to: .killingSessions)
+            for session in sessionsInFolder {
+                logger.info("deleteWorktree: killing session \(session.name) (id=\(session.sessionId), type=\(session.agentType))")
+                try? await apiClient.killSession(
+                    sessionName: session.name,
+                    agentType: session.agentType,
+                    sessionId: session.sessionId
+                )
+            }
+            state.completeCurrentStep()
         }
 
-        // Find the repo config and parent repo path
+        // Step 2: Find the repo config and run pre-delete script
         let repoPath: String
         if let config = repoConfigForWorktree(path: folderPath) {
             logger.info("deleteWorktree: matched repo config '\(config.displayName)' (repoPath=\(config.repoPath))")
-            // Run pre-delete script if configured
             if let script = config.preDeleteScript, !script.isEmpty {
+                state.advance(to: .runningPreDeleteScript)
                 let branchName = URL(fileURLWithPath: folderPath).lastPathComponent
                 logger.info("deleteWorktree: running pre-delete script: \(script)")
                 let scriptResult = await GitService.runScript(
@@ -624,17 +683,24 @@ final class SessionStore {
                 } else {
                     logger.info("deleteWorktree: pre-delete script succeeded")
                 }
+                state.completeCurrentStep()
+            } else {
+                state.skipStep(.runningPreDeleteScript)
             }
             repoPath = config.repoPath
         } else if let parsed = GitService.findParentRepoPath(worktreePath: folderPath) {
             logger.info("deleteWorktree: no repo config match, parsed parent repo from .git file: \(parsed)")
+            state.skipStep(.runningPreDeleteScript)
             repoPath = parsed
         } else {
             logger.error("deleteWorktree: cannot determine parent repo for \(folderPath) — aborting")
+            state.fail(at: .runningPreDeleteScript, message: "Cannot determine parent repository")
+            handleDeletionFailure(state: state)
             return
         }
 
-        // Remove the worktree (try normal first, then force)
+        // Step 3: Remove the worktree
+        state.advance(to: .removingWorktree)
         logger.info("deleteWorktree: removing worktree (repo=\(repoPath), path=\(folderPath))")
         var result = await GitService.removeWorktree(repoPath: repoPath, worktreePath: folderPath)
         if !result.succeeded {
@@ -642,22 +708,65 @@ final class SessionStore {
             result = await GitService.removeWorktree(repoPath: repoPath, worktreePath: folderPath, force: true)
         }
 
-        if result.succeeded {
-            logger.info("deleteWorktree: worktree removed successfully")
-
-            // Delete the branch now that the worktree is gone
-            let branchName = URL(fileURLWithPath: folderPath).lastPathComponent
-            logger.info("deleteWorktree: deleting branch '\(branchName)'")
-            let branchResult = await GitService.deleteBranch(repoPath: repoPath, branchName: branchName)
-            if !branchResult.succeeded {
-                logger.warning("deleteWorktree: branch deletion failed (may not exist or is current): \(branchResult.errorMessage)")
-            }
-        } else {
+        guard result.succeeded else {
             logger.error("deleteWorktree: failed to remove worktree even with force: \(result.errorMessage)")
+            state.fail(at: .removingWorktree, message: result.errorMessage)
+            handleDeletionFailure(state: state)
+            return
         }
+        logger.info("deleteWorktree: worktree removed successfully")
+        state.completeCurrentStep()
+
+        // Step 4: Delete the branch
+        state.advance(to: .deletingBranch)
+        let branchName = URL(fileURLWithPath: folderPath).lastPathComponent
+        logger.info("deleteWorktree: deleting branch '\(branchName)'")
+        let branchResult = await GitService.deleteBranch(repoPath: repoPath, branchName: branchName)
+        if !branchResult.succeeded {
+            logger.warning("deleteWorktree: branch deletion failed (may not exist or is current): \(branchResult.errorMessage)")
+        }
+        state.completeCurrentStep()
+
+        handleDeletionSuccess(state: state)
+    }
+
+    /// Cleans up after a successful deletion.
+    private func handleDeletionSuccess(state: WorktreeDeletionState) {
+        state.isFinished = true
+
+        // Remove sessions belonging to this folder
+        sessions.removeAll { $0.workingDirectory == state.folderPath }
+
+        // Remove from discovered folders
+        discoveredFolders.remove(state.folderPath)
+        saveDiscoveredFolders()
+
+        // Clean up deletion state
+        activeDeletions.removeValue(forKey: state.folderPath)
+
+        // Clear selection if it pointed to the deleted folder
+        if let id = selectedSessionId {
+            if id == state.folderPath || sessions.first(where: { $0.id == id }) == nil {
+                selectedSessionId = nil
+            }
+        }
+
+        reconcileOrder()
 
         logger.info("deleteWorktree: triggering folder rescan")
         scanWorktreeFolders()
+    }
+
+    /// Cleans up after a failed deletion attempt.
+    private func handleDeletionFailure(state: WorktreeDeletionState) {
+        activeDeletions.removeValue(forKey: state.folderPath)
+
+        let alert = NSAlert()
+        alert.messageText = "Worktree Deletion Failed"
+        alert.informativeText = state.error ?? "An unknown error occurred."
+        alert.alertStyle = .critical
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
     }
 
     // MARK: - Async Worktree Creation

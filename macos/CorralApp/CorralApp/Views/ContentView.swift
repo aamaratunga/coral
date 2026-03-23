@@ -8,7 +8,9 @@ struct ContentView: View {
             SessionListView()
                 .navigationSplitViewColumnWidth(min: 220, ideal: 280, max: 400)
         } detail: {
-            if let creationState = store.selectedCreationState {
+            if let deletionState = store.selectedDeletionState {
+                WorktreeDeletionProgressView(state: deletionState)
+            } else if let creationState = store.selectedCreationState {
                 WorktreeCreationProgressView(state: creationState)
             } else if let session = store.selectedSession {
                 SessionDetailView(session: session)

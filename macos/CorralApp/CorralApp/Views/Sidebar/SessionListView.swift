@@ -192,7 +192,7 @@ struct SessionListView: View {
             Button("Delete", role: .destructive) {
                 if let path = pendingWorktreeDeletion {
                     pendingWorktreeDeletion = nil
-                    Task { await store.deleteWorktree(folderPath: path) }
+                    store.beginWorktreeDeletion(folderPath: path)
                 }
             }
         } message: {
@@ -327,6 +327,8 @@ struct SessionListView: View {
     private func sessionRow(for session: Session, in folderPath: String) -> some View {
         if session.isPlaceholder {
             placeholderRow(for: session)
+        } else if store.isDeleting(folderPath: folderPath) {
+            deletingRow(for: session)
         } else {
             realSessionRow(for: session, in: folderPath)
         }
@@ -359,6 +361,51 @@ struct SessionListView: View {
                 .padding(.vertical, 1)
                 .background(.orange.opacity(0.15))
                 .foregroundStyle(.orange)
+                .clipShape(Capsule())
+        }
+        .padding(.vertical, 3)
+        .padding(.horizontal, 5)
+        .padding(.leading, 36)
+        .background(
+            RoundedRectangle(cornerRadius: 6)
+                .fill(isSelected ? Color.primary.opacity(0.08) : Color.clear)
+        )
+        .opacity(0.75)
+        .contentShape(Rectangle())
+        .listRowInsets(EdgeInsets(top: -1, leading: 0, bottom: -1, trailing: 8))
+        .listRowSeparator(.hidden)
+        .onTapGesture {
+            store.selectedSessionId = session.id
+        }
+    }
+
+    @ViewBuilder
+    private func deletingRow(for session: Session) -> some View {
+        let isSelected = store.selectedSessionId == session.id
+
+        HStack(spacing: 8) {
+            ProgressView()
+                .controlSize(.mini)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(session.displayLabel)
+                    .font(.headline)
+                    .lineLimit(1)
+
+                Text("Removing…")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Spacer()
+
+            Text("Deleting")
+                .font(.caption2)
+                .fontWeight(.medium)
+                .padding(.horizontal, 5)
+                .padding(.vertical, 1)
+                .background(.red.opacity(0.15))
+                .foregroundStyle(.red)
                 .clipShape(Capsule())
         }
         .padding(.vertical, 3)
@@ -526,7 +573,7 @@ struct SessionListView: View {
             }
         }
 
-        if GitService.isWorktree(path: path) {
+        if GitService.isWorktree(path: path) && !store.isDeleting(folderPath: path) {
             Divider()
 
             Button("Delete Worktree…", role: .destructive) {
