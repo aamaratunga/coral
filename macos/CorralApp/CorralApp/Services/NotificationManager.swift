@@ -8,7 +8,7 @@ import os
 final class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
     static let shared = NotificationManager()
 
-    private let logger = Logger(subsystem: "com.coral.app", category: "Notifications")
+    private let logger = Logger(subsystem: "com.corral.app", category: "Notifications")
     private let center = UNUserNotificationCenter.current()
 
     /// Tracks the last notified state per session to prevent duplicate notifications

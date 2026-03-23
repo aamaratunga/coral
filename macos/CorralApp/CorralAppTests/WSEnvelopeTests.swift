@@ -1,11 +1,11 @@
 import XCTest
-@testable import Coral
+@testable import Corral
 
 final class WSEnvelopeTests: XCTestCase {
 
     // MARK: - coral_update
 
-    func testDecodeCoralUpdate() throws {
+    func testDecodeCorralUpdate() throws {
         let json = """
         {
             "type": "coral_update",
@@ -27,7 +27,7 @@ final class WSEnvelopeTests: XCTestCase {
 
     // MARK: - coral_diff
 
-    func testDecodeCoralDiff() throws {
+    func testDecodeCorralDiff() throws {
         let json = """
         {
             "type": "coral_diff",

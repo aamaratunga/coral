@@ -1,5 +1,5 @@
 import XCTest
-@testable import Coral
+@testable import Corral
 
 final class LaunchRequestTests: XCTestCase {
 

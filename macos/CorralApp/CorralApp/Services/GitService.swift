@@ -22,7 +22,7 @@ struct CommandResult {
 }
 
 enum GitService {
-    private static let logger = Logger(subsystem: "com.coral.app", category: "GitService")
+    private static let logger = Logger(subsystem: "com.corral.app", category: "GitService")
 
     // MARK: - Worktree Operations
 

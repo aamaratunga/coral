@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct CoralApp: App {
+struct CorralApp: App {
     @State private var serverManager = ServerManager()
     @State private var sessionStore = SessionStore()
 

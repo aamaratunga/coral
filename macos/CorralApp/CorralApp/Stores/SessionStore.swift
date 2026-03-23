@@ -79,8 +79,8 @@ final class SessionStore {
     var discoveredFolders: Set<String> = []
 
     private(set) var apiClient = APIClient()
-    private var webSocket: CoralWebSocket?
-    private let logger = Logger(subsystem: "com.coral.app", category: "SessionStore")
+    private var webSocket: CorralWebSocket?
+    private let logger = Logger(subsystem: "com.corral.app", category: "SessionStore")
     private var isSuppressingPersistence = false
     private var lastScannedWorktreePaths: Set<String> = []
     private var scanTask: Task<Void, Never>?
@@ -224,7 +224,7 @@ final class SessionStore {
         loadSavedOrder()
         scanWorktreeFolders()
 
-        let ws = CoralWebSocket(port: port)
+        let ws = CorralWebSocket(port: port)
         webSocket = ws
 
         ws.onFullUpdate = { [weak self] sessions in

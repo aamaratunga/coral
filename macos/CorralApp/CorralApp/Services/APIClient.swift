@@ -1,10 +1,10 @@
 import Foundation
 import os
 
-/// REST API client for Coral server endpoints.
+/// REST API client for Corral server endpoints.
 struct APIClient {
     let baseURL: URL
-    private let logger = Logger(subsystem: "com.coral.app", category: "APIClient")
+    private let logger = Logger(subsystem: "com.corral.app", category: "APIClient")
 
     init(port: Int = 8420) {
         baseURL = URL(string: "http://127.0.0.1:\(port)")!

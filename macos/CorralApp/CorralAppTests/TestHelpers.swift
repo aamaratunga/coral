@@ -1,5 +1,5 @@
 import Foundation
-@testable import Coral
+@testable import Corral
 
 /// Factory for creating `Session` values with sensible defaults.
 /// Only override the fields your test cares about.

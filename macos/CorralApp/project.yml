@@ -1,6 +1,6 @@
-name: CoralApp
+name: CorralApp
 options:
-  bundleIdPrefix: com.coral
+  bundleIdPrefix: com.corral
   deploymentTarget:
     macOS: "15.0"
   xcodeVersion: "16.0"
@@ -12,54 +12,54 @@ packages:
     from: "1.2.0"
 
 targets:
-  CoralApp:
+  CorralApp:
     type: application
     platform: macOS
     sources:
-      - CoralApp
+      - CorralApp
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.coral.app
+        PRODUCT_BUNDLE_IDENTIFIER: com.corral.app
         MARKETING_VERSION: "1.0.0"
         CURRENT_PROJECT_VERSION: "1"
         SWIFT_VERSION: "5.10"
         MACOSX_DEPLOYMENT_TARGET: "15.0"
         CODE_SIGN_ENTITLEMENTS: ""
         ENABLE_APP_SANDBOX: "NO"
-        PRODUCT_NAME: Coral
+        PRODUCT_NAME: Corral
     dependencies:
       - package: SwiftTerm
     info:
-      path: CoralApp/Info.plist
+      path: CorralApp/Info.plist
       properties:
-        CFBundleName: Coral
-        CFBundleDisplayName: Coral
+        CFBundleName: Corral
+        CFBundleDisplayName: Corral
         CFBundleShortVersionString: "1.0.0"
         CFBundleVersion: "1"
         LSMinimumSystemVersion: "15.0"
         NSMainStoryboardFile: ""
 
-  CoralAppTests:
+  CorralAppTests:
     type: bundle.unit-test
     platform: macOS
     sources:
-      - CoralAppTests
+      - CorralAppTests
     dependencies:
-      - target: CoralApp
+      - target: CorralApp
     settings:
       base:
         SWIFT_VERSION: "5.10"
         MACOSX_DEPLOYMENT_TARGET: "15.0"
         GENERATE_INFOPLIST_FILE: "YES"
         BUNDLE_LOADER: "$(TEST_HOST)"
-        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Coral.app/Contents/MacOS/Coral"
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Corral.app/Contents/MacOS/Corral"
 
 schemes:
-  CoralApp:
+  CorralApp:
     build:
       targets:
-        CoralApp: all
-        CoralAppTests: [test]
+        CorralApp: all
+        CorralAppTests: [test]
     test:
       targets:
-        - CoralAppTests
+        - CorralAppTests
