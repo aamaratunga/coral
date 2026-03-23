@@ -1029,6 +1029,15 @@ async def create_agent_event(name: str, body: dict):
     tool_name = body.get("tool_name")
     session_id = body.get("session_id")
     detail_json = body.get("detail_json")
+
+    # Suppress duplicate "stop" events after a session has been acknowledged.
+    # Claude Code continues to fire hooks with stop_hook_active=true while
+    # the agent sits idle, which would re-mark an acknowledged session as done.
+    if event_type == "stop" and session_id:
+        latest = await store.get_latest_event_types([session_id])
+        if latest.get(session_id, (None,))[0] in ("stop", "acknowledge"):
+            return {"ok": True, "suppressed": True}
+
     # Ensure detail_json is a string for SQLite storage
     if detail_json is not None and not isinstance(detail_json, str):
         detail_json = json.dumps(detail_json)

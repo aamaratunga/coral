@@ -317,7 +317,7 @@ class TaskStore(DatabaseManager):
             f"SELECT session_id, event_type, summary FROM agent_events "
             f"WHERE session_id IN ({placeholders}) "
             f"AND event_type NOT IN ('status', 'goal', 'confidence') "
-            f"ORDER BY created_at DESC",
+            f"ORDER BY created_at DESC, id DESC",
             session_ids,
         )).fetchall()
         result: dict[str, tuple[str, str]] = {}
