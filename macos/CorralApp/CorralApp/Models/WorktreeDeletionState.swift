@@ -6,6 +6,18 @@ final class WorktreeDeletionState: Identifiable {
     let folderPath: String
     let folderLabel: String
     let sessionCount: Int
+    let repoPath: String
+
+    var shortFolderPath: String { Self.tildeShorten(folderPath) }
+    var shortRepoPath: String { Self.tildeShorten(repoPath) }
+
+    private static func tildeShorten(_ path: String) -> String {
+        let home = FileManager.default.homeDirectoryForCurrentUser.path
+        if path.hasPrefix(home) {
+            return "~" + path.dropFirst(home.count)
+        }
+        return path
+    }
 
     enum Step: String, CaseIterable {
         case killingSessions = "Killing sessions"
@@ -23,11 +35,12 @@ final class WorktreeDeletionState: Identifiable {
     var error: String?
     var isFinished = false
 
-    init(folderPath: String, sessionCount: Int) {
+    init(folderPath: String, sessionCount: Int, repoPath: String = "") {
         self.id = folderPath
         self.folderPath = folderPath
         self.folderLabel = URL(fileURLWithPath: folderPath).lastPathComponent
         self.sessionCount = sessionCount
+        self.repoPath = repoPath
         self.stepStatuses = Dictionary(uniqueKeysWithValues: Step.allCases.map { ($0, StepStatus.pending) })
     }
 

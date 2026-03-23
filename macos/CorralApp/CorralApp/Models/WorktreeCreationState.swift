@@ -6,6 +6,18 @@ final class WorktreeCreationState: Identifiable {
     let branchName: String
     let repoDisplayName: String
     let worktreePath: String
+    let repoPath: String
+
+    var shortWorktreePath: String { Self.tildeShorten(worktreePath) }
+    var shortRepoPath: String { Self.tildeShorten(repoPath) }
+
+    private static func tildeShorten(_ path: String) -> String {
+        let home = FileManager.default.homeDirectoryForCurrentUser.path
+        if path.hasPrefix(home) {
+            return "~" + path.dropFirst(home.count)
+        }
+        return path
+    }
 
     enum Step: String, CaseIterable {
         case creatingWorktree = "Creating worktree"
@@ -22,11 +34,12 @@ final class WorktreeCreationState: Identifiable {
     var error: String?
     var isFinished = false
 
-    init(branchName: String, repoDisplayName: String, worktreePath: String) {
+    init(branchName: String, repoDisplayName: String, worktreePath: String, repoPath: String) {
         self.id = "placeholder-\(UUID().uuidString)"
         self.branchName = branchName
         self.repoDisplayName = repoDisplayName
         self.worktreePath = worktreePath
+        self.repoPath = repoPath
         self.stepStatuses = Dictionary(uniqueKeysWithValues: Step.allCases.map { ($0, StepStatus.pending) })
     }
 

@@ -623,7 +623,8 @@ final class SessionStore {
     /// Synchronous entry point: creates deletion state, starts async deletion pipeline.
     func beginWorktreeDeletion(folderPath: String) {
         let sessionsInFolder = sessions.filter { $0.workingDirectory == folderPath }
-        let state = WorktreeDeletionState(folderPath: folderPath, sessionCount: sessionsInFolder.count)
+        let repoPath = repoConfigForWorktree(path: folderPath)?.repoPath ?? ""
+        let state = WorktreeDeletionState(folderPath: folderPath, sessionCount: sessionsInFolder.count, repoPath: repoPath)
 
         activeDeletions[folderPath] = state
 
@@ -778,7 +779,8 @@ final class SessionStore {
         let state = WorktreeCreationState(
             branchName: branchName,
             repoDisplayName: config.displayName,
-            worktreePath: worktreePath
+            worktreePath: worktreePath,
+            repoPath: config.repoPath
         )
 
         // Insert worktree path into discovered folders immediately

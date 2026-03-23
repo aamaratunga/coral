@@ -1,9 +1,8 @@
+import Lottie
 import SwiftUI
 
 struct WorktreeCreationProgressView: View {
     let state: WorktreeCreationState
-
-    @State private var pulse = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -22,22 +21,12 @@ struct WorktreeCreationProgressView: View {
             VStack(spacing: 20) {
                 Spacer()
 
-                // Pulsing branch icon
-                Image(systemName: "arrow.triangle.branch")
-                    .font(.system(size: 48))
-                    .foregroundStyle(.green.opacity(0.7))
-                    .scaleEffect(pulse ? 1.08 : 0.95)
-                    .opacity(pulse ? 1.0 : 0.6)
-                    .animation(
-                        .easeInOut(duration: 1.2).repeatForever(autoreverses: true),
-                        value: pulse
-                    )
-                    .onAppear { pulse = true }
-
-                // Branch name
-                Text(state.branchName)
-                    .font(.title3.weight(.medium))
-                    .foregroundStyle(.white.opacity(0.9))
+                // Lottie hand animation
+                LottieView {
+                    try await DotLottieFile.named("Loading_Hand")
+                }
+                .playing(loopMode: .loop)
+                .frame(width: 280, height: 280)
 
                 // Progress stepper
                 VStack(alignment: .leading, spacing: 12) {
@@ -45,7 +34,7 @@ struct WorktreeCreationProgressView: View {
                         stepRow(step)
                     }
                 }
-                .padding(.horizontal, 40)
+                .frame(width: 280)
 
                 Spacer()
             }
@@ -62,12 +51,14 @@ struct WorktreeCreationProgressView: View {
                 .controlSize(.small)
 
             VStack(alignment: .leading, spacing: 1) {
-                Text("Creating Worktree")
+                Text("Creating \(state.shortWorktreePath)")
                     .font(.headline)
 
-                Text(state.repoDisplayName)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                if !state.repoPath.isEmpty {
+                    Text("from repo \(state.shortRepoPath)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
 
             Spacer()

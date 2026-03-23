@@ -1,9 +1,8 @@
+import Lottie
 import SwiftUI
 
 struct WorktreeDeletionProgressView: View {
     let state: WorktreeDeletionState
-
-    @State private var pulse = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -22,22 +21,12 @@ struct WorktreeDeletionProgressView: View {
             VStack(spacing: 20) {
                 Spacer()
 
-                // Pulsing trash icon
-                Image(systemName: "trash")
-                    .font(.system(size: 48))
-                    .foregroundStyle(.red.opacity(0.7))
-                    .scaleEffect(pulse ? 1.08 : 0.95)
-                    .opacity(pulse ? 1.0 : 0.6)
-                    .animation(
-                        .easeInOut(duration: 1.2).repeatForever(autoreverses: true),
-                        value: pulse
-                    )
-                    .onAppear { pulse = true }
-
-                // Folder name
-                Text(state.folderLabel)
-                    .font(.title3.weight(.medium))
-                    .foregroundStyle(.white.opacity(0.9))
+                // Lottie paper plane animation
+                LottieView {
+                    try await DotLottieFile.named("Loading_Paperplane")
+                }
+                .playing(loopMode: .loop)
+                .frame(width: 380, height: 380)
 
                 // Progress stepper
                 VStack(alignment: .leading, spacing: 12) {
@@ -45,7 +34,8 @@ struct WorktreeDeletionProgressView: View {
                         stepRow(step)
                     }
                 }
-                .padding(.horizontal, 40)
+                .frame(width: 280)
+                .offset(x: -40)
 
                 Spacer()
             }
@@ -62,12 +52,14 @@ struct WorktreeDeletionProgressView: View {
                 .controlSize(.small)
 
             VStack(alignment: .leading, spacing: 1) {
-                Text("Deleting Worktree")
+                Text("Removing \(state.shortFolderPath)")
                     .font(.headline)
 
-                Text("\(state.sessionCount) session\(state.sessionCount == 1 ? "" : "s")")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                if !state.repoPath.isEmpty {
+                    Text("from repo \(state.shortRepoPath)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
 
             Spacer()

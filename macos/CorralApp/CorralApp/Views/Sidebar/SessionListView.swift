@@ -342,26 +342,12 @@ struct SessionListView: View {
             ProgressView()
                 .controlSize(.mini)
 
-            VStack(alignment: .leading, spacing: 2) {
-                Text(session.displayLabel)
-                    .font(.headline)
-                    .lineLimit(1)
-
-                Text("Setting up…")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
+            Text("Setting up…")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
 
             Spacer()
-
-            Text("Creating")
-                .font(.caption2)
-                .fontWeight(.medium)
-                .padding(.horizontal, 5)
-                .padding(.vertical, 1)
-                .background(.orange.opacity(0.15))
-                .foregroundStyle(.orange)
-                .clipShape(Capsule())
         }
         .padding(.vertical, 3)
         .padding(.horizontal, 5)
@@ -387,26 +373,12 @@ struct SessionListView: View {
             ProgressView()
                 .controlSize(.mini)
 
-            VStack(alignment: .leading, spacing: 2) {
-                Text(session.displayLabel)
-                    .font(.headline)
-                    .lineLimit(1)
-
-                Text("Removing…")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
+            Text("Removing…")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
 
             Spacer()
-
-            Text("Deleting")
-                .font(.caption2)
-                .fontWeight(.medium)
-                .padding(.horizontal, 5)
-                .padding(.vertical, 1)
-                .background(.red.opacity(0.15))
-                .foregroundStyle(.red)
-                .clipShape(Capsule())
         }
         .padding(.vertical, 3)
         .padding(.horizontal, 5)

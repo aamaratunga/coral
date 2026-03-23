@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		017A106EF3655348D05F762E /* SessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E6B5AAD2E432BBE05E96083 /* SessionTests.swift */; };
+		0A1B2C3D4E5F6A7B8C9D0E1F /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 1A2B3C4D5E6F7A8B9C0D1E2F /* Lottie */; };
+		2A3B4C5D6E7F8A9B0C1D2E3F /* Loading_Hand.lottie in Resources */ = {isa = PBXBuildFile; fileRef = 4A5B6C7D8E9F0A1B2C3D4E5F /* Loading_Hand.lottie */; };
+		3A4B5C6D7E8F9A0B1C2D3E4F /* Loading_Paperplane.lottie in Resources */ = {isa = PBXBuildFile; fileRef = 5A6B7C8D9E0F1A2B3C4D5E6F /* Loading_Paperplane.lottie */; };
 		1974C968A6DE55F7589F6CD1 /* SwiftTerm in Frameworks */ = {isa = PBXBuildFile; productRef = 1CCA2CFCC2A378E76C2B1867 /* SwiftTerm */; };
 		2D5BA19AAC86B3560493E451 /* RepoConfigRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111FBA5CB8AA09D26FCF0E76 /* RepoConfigRow.swift */; };
 		4DEBA0E963FBCBFA6EE2D496 /* WorktreeCreationProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C59A1A5954AEE90CC23D0FE /* WorktreeCreationProgressView.swift */; };
@@ -55,6 +58,8 @@
 
 /* Begin PBXFileReference section */
 		0C57682E9346C4A7D7F58242 /* LocalTerminalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalTerminalView.swift; sourceTree = "<group>"; };
+		4A5B6C7D8E9F0A1B2C3D4E5F /* Loading_Hand.lottie */ = {isa = PBXFileReference; lastKnownFileType = file; path = Loading_Hand.lottie; sourceTree = "<group>"; };
+		5A6B7C8D9E0F1A2B3C4D5E6F /* Loading_Paperplane.lottie */ = {isa = PBXFileReference; lastKnownFileType = file; path = Loading_Paperplane.lottie; sourceTree = "<group>"; };
 		0C7398FFC95605F7968E046D /* TerminalWebSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalWebSocket.swift; sourceTree = "<group>"; };
 		111FBA5CB8AA09D26FCF0E76 /* RepoConfigRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoConfigRow.swift; sourceTree = "<group>"; };
 		148FEA25A669008A3FBD34C9 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
@@ -98,6 +103,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1974C968A6DE55F7589F6CD1 /* SwiftTerm in Frameworks */,
+				0A1B2C3D4E5F6A7B8C9D0E1F /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -212,12 +218,22 @@
 			path = CorralAppTests;
 			sourceTree = "<group>";
 		};
+		6A7B8C9D0E1F2A3B4C5D6E7F /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4A5B6C7D8E9F0A1B2C3D4E5F /* Loading_Hand.lottie */,
+				5A6B7C8D9E0F1A2B3C4D5E6F /* Loading_Paperplane.lottie */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		FB71ABCE45E689E910B4D81C /* CorralApp */ = {
 			isa = PBXGroup;
 			children = (
 				A74CB7947FD711C4D7A8C9D2 /* CorralApp.swift */,
 				767848B29D1C942327245121 /* Info.plist */,
 				09FD99BC9FA7F96F900C6E4D /* Models */,
+				6A7B8C9D0E1F2A3B4C5D6E7F /* Resources */,
 				034605BAF67700C1186ABEF7 /* Services */,
 				4BC6F8D2D2E45A91378D31AB /* Stores */,
 				014BA52679E1D7447C2AE6D2 /* Views */,
@@ -259,6 +275,7 @@
 			buildPhases = (
 				F3CAE88DC3FBD2E9A0EB71F7 /* Sources */,
 				63C7E52072E4F77F25DAB08E /* Frameworks */,
+				7A8B9C0D1E2F3A4B5C6D7E8F /* Resources */,
 			);
 			buildRules = (
 			);
@@ -267,6 +284,7 @@
 			name = CorralApp;
 			packageProductDependencies = (
 				1CCA2CFCC2A378E76C2B1867 /* SwiftTerm */,
+				1A2B3C4D5E6F7A8B9C0D1E2F /* Lottie */,
 			);
 			productName = CorralApp;
 			productReference = EAE868B9229C12D2FD489CA3 /* CorralApp.app */;
@@ -294,6 +312,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				E3B87009313602495DD85D2D /* XCRemoteSwiftPackageReference "SwiftTerm" */,
+				8A9B0C1D2E3F4A5B6C7D8E9F /* XCRemoteSwiftPackageReference "lottie-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6945C311B6BF3017D4DFB336 /* Products */;
@@ -305,6 +324,18 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7A8B9C0D1E2F3A4B5C6D7E8F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A3B4C5D6E7F8A9B0C1D2E3F /* Loading_Hand.lottie in Resources */,
+				3A4B5C6D7E8F9A0B1C2D3E4F /* Loading_Paperplane.lottie in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E5ABAEA5A0C46C4412EAD0C4 /* Sources */ = {
@@ -599,6 +630,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		8A9B0C1D2E3F4A5B6C7D8E9F /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.6.0;
+			};
+		};
 		E3B87009313602495DD85D2D /* XCRemoteSwiftPackageReference "SwiftTerm" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/migueldeicaza/SwiftTerm";
@@ -610,6 +649,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1A2B3C4D5E6F7A8B9C0D1E2F /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8A9B0C1D2E3F4A5B6C7D8E9F /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
 		1CCA2CFCC2A378E76C2B1867 /* SwiftTerm */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E3B87009313602495DD85D2D /* XCRemoteSwiftPackageReference "SwiftTerm" */;
