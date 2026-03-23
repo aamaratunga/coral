@@ -10,8 +10,6 @@ struct CreateWorktreeDropdown: View {
     @FocusState private var focusedField: Field?
     @State private var selectedConfig: RepoConfig?
     @State private var branchName = ""
-    @State private var isCreating = false
-    @State private var errorMessage: String?
 
     private enum Field: Hashable {
         case repoList
@@ -133,7 +131,6 @@ struct CreateWorktreeDropdown: View {
                     withAnimation(.easeInOut(duration: 0.15)) {
                         selectedConfig = nil
                         branchName = ""
-                        errorMessage = nil
                         focusedField = .repoList
                     }
                 } label: {
@@ -156,20 +153,15 @@ struct CreateWorktreeDropdown: View {
                     .textFieldStyle(.roundedBorder)
                     .focused($focusedField, equals: .branchName)
                     .onSubmit {
-                        if isValid && !isCreating {
-                            Task { await createWorktree(config: config) }
+                        if isValid {
+                            createWorktree(config: config)
                         }
                     }
 
-                if isCreating {
-                    ProgressView()
-                        .controlSize(.small)
-                } else {
-                    Button("Create") {
-                        Task { await createWorktree(config: config) }
-                    }
-                    .disabled(!isValid)
+                Button("Create") {
+                    createWorktree(config: config)
                 }
+                .disabled(!isValid)
             }
             .padding(.horizontal, 12)
 
@@ -177,14 +169,6 @@ struct CreateWorktreeDropdown: View {
                 Text("Branch name cannot contain spaces")
                     .font(.caption)
                     .foregroundStyle(.red)
-                    .padding(.horizontal, 12)
-            }
-
-            if let errorMessage {
-                Text(errorMessage)
-                    .font(.caption)
-                    .foregroundStyle(.red)
-                    .lineLimit(3)
                     .padding(.horizontal, 12)
             }
         }
@@ -197,46 +181,9 @@ struct CreateWorktreeDropdown: View {
         store.showingCreateWorktreeSheet = false
     }
 
-    private func createWorktree(config: RepoConfig) async {
-        logger.info("Starting worktree creation: repo=\(config.repoPath) worktreeFolder=\(config.worktreeFolderPath) branch=\(branchName)")
-        isCreating = true
-        errorMessage = nil
-
-        let result = await GitService.createWorktree(
-            repoPath: config.repoPath,
-            worktreeFolder: config.worktreeFolderPath,
-            branchName: branchName
-        )
-
-        guard result.succeeded else {
-            logger.error("Worktree creation failed: \(result.errorMessage)")
-            errorMessage = result.errorMessage
-            isCreating = false
-            return
-        }
-
-        let worktreePath = (config.worktreeFolderPath as NSString).appendingPathComponent(branchName)
-        logger.info("Worktree created at \(worktreePath)")
-
-        if let script = config.postCreateScript, !script.isEmpty {
-            logger.info("Running post-create script: \(script)")
-            let scriptResult = await GitService.runScript(
-                scriptPath: script,
-                worktreePath: worktreePath,
-                branchName: branchName,
-                repoPath: config.repoPath
-            )
-            if !scriptResult.succeeded {
-                logger.error("Post-create script failed: \(scriptResult.errorMessage)")
-                errorMessage = "Worktree created but post-create script failed: \(scriptResult.errorMessage)"
-            }
-        }
-
-        logger.info("Triggering folder rescan and launching Claude agent in \(worktreePath)")
-        store.scanWorktreeFolders()
-        store.launchSession(agentType: "claude", in: worktreePath)
-
-        isCreating = false
+    private func createWorktree(config: RepoConfig) {
+        logger.info("Starting async worktree creation: repo=\(config.repoPath) worktreeFolder=\(config.worktreeFolderPath) branch=\(branchName)")
+        store.beginWorktreeCreation(config: config, branchName: branchName)
         dismiss()
     }
 }

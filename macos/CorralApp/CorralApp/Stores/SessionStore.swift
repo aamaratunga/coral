@@ -1,4 +1,5 @@
 import Foundation
+import AppKit
 import os
 
 // MARK: - SessionGroup
@@ -29,6 +30,9 @@ final class SessionStore {
     var showingTerminalLaunchSheet = false
     var showingCreateWorktreeSheet = false
     var isConnected = false
+
+    /// Active worktree creation states, keyed by placeholder session ID.
+    var activeCreations: [String: WorktreeCreationState] = [:]
 
     // MARK: - Ordering State (persisted via UserDefaults)
 
@@ -97,6 +101,12 @@ final class SessionStore {
     var selectedSession: Session? {
         guard let id = selectedSessionId else { return nil }
         return sessions.first { $0.id == id }
+    }
+
+    /// The creation state for the currently selected placeholder, if any.
+    var selectedCreationState: WorktreeCreationState? {
+        guard let id = selectedSessionId else { return nil }
+        return activeCreations[id]
     }
 
     // MARK: - Ordered Groups
@@ -340,6 +350,9 @@ final class SessionStore {
             uniquingKeysWith: { _, last in last }
         )
 
+        // Save active placeholder sessions before replacing
+        let activePlaceholders = sessions.filter { $0.isPlaceholder && activeCreations[$0.id] != nil }
+
         // Deduplicate by id — the server may send the same session twice
         var seen = Set<String>()
         sessions = newSessions.compactMap { session in
@@ -351,6 +364,11 @@ final class SessionStore {
             return s
         }
 
+        // Re-append placeholders that are still being created
+        for placeholder in activePlaceholders where !sessions.contains(where: { $0.id == placeholder.id }) {
+            sessions.append(placeholder)
+        }
+
         reconcileOrder()
         isConnected = true
         logger.info("Full update: \(self.sessions.count) sessions")
@@ -360,7 +378,7 @@ final class SessionStore {
     }
 
     func handleDiff(changed: [Session], removed: [String]) {
-        // Apply removals
+        // Apply removals — but never remove placeholder sessions
         if !removed.isEmpty {
             // Clear notification tracking for removed sessions
             for id in removed {
@@ -368,7 +386,8 @@ final class SessionStore {
             }
 
             sessions.removeAll { session in
-                removed.contains(session.sessionId) || removed.contains(session.name)
+                guard !session.isPlaceholder else { return false }
+                return removed.contains(session.sessionId) || removed.contains(session.name)
             }
             // Clear selection if the selected session was removed
             if let selectedId = selectedSessionId,
@@ -399,6 +418,14 @@ final class SessionStore {
                 if !sessions.contains(where: { $0.id == change.id }) {
                     sessions.append(change)
                     NotificationManager.shared.evaluateTransition(old: nil, new: change)
+                }
+            }
+
+            // Check if this new session matches a finished placeholder (by workingDirectory)
+            for (placeholderId, creation) in activeCreations {
+                if creation.isFinished && change.workingDirectory == creation.worktreePath {
+                    replacePlaceholder(placeholderId: placeholderId, realSessionId: change.id)
+                    break
                 }
             }
         }
@@ -631,6 +658,129 @@ final class SessionStore {
 
         logger.info("deleteWorktree: triggering folder rescan")
         scanWorktreeFolders()
+    }
+
+    // MARK: - Async Worktree Creation
+
+    /// Synchronous entry point: creates placeholder session, starts async creation.
+    func beginWorktreeCreation(config: RepoConfig, branchName: String) {
+        let worktreePath = (config.worktreeFolderPath as NSString).appendingPathComponent(branchName)
+
+        let state = WorktreeCreationState(
+            branchName: branchName,
+            repoDisplayName: config.displayName,
+            worktreePath: worktreePath
+        )
+
+        // Insert worktree path into discovered folders immediately
+        discoveredFolders.insert(worktreePath)
+        saveDiscoveredFolders()
+
+        // Create placeholder session
+        var placeholder = Session(
+            name: state.id,
+            sessionId: state.id,
+            workingDirectory: worktreePath,
+            working: true
+        )
+        placeholder.displayName = branchName
+        placeholder.branch = branchName
+        placeholder.isPlaceholder = true
+
+        sessions.append(placeholder)
+        activeCreations[state.id] = state
+        reconcileOrder()
+
+        // Select the placeholder and ensure its folder + section are expanded
+        selectedSessionId = state.id
+        folderExpansion[worktreePath] = true
+        let status = folderStatus[worktreePath] ?? .inProgress
+        sectionExpansion[status] = true
+
+        Task { await performWorktreeCreation(state: state, config: config) }
+    }
+
+    /// Async pipeline: creates worktree, runs setup script, launches agent.
+    private func performWorktreeCreation(state: WorktreeCreationState, config: RepoConfig) async {
+        // Step 1: Create worktree
+        state.advance(to: .creatingWorktree)
+        let result = await GitService.createWorktree(
+            repoPath: config.repoPath,
+            worktreeFolder: config.worktreeFolderPath,
+            branchName: state.branchName
+        )
+        guard result.succeeded else {
+            state.fail(at: .creatingWorktree, message: result.errorMessage)
+            handleCreationFailure(state: state, removeDiscoveredFolder: true)
+            return
+        }
+        state.completeCurrentStep()
+
+        // Step 2: Run post-create script (if configured)
+        if let script = config.postCreateScript, !script.isEmpty {
+            state.advance(to: .runningSetupScript)
+            let scriptResult = await GitService.runScript(
+                scriptPath: script,
+                worktreePath: state.worktreePath,
+                branchName: state.branchName,
+                repoPath: config.repoPath
+            )
+            if !scriptResult.succeeded {
+                logger.warning("Post-create script failed: \(scriptResult.errorMessage)")
+                // Non-fatal — continue with agent launch
+            }
+            state.completeCurrentStep()
+        } else {
+            state.skipStep(.runningSetupScript)
+        }
+
+        // Rescan so sidebar picks up the new folder from disk
+        scanWorktreeFolders()
+
+        // Step 3: Launch agent
+        state.advance(to: .launchingAgent)
+        let request = LaunchRequest(workingDir: state.worktreePath, agentType: "claude")
+        do {
+            let response = try await apiClient.launchAgent(request)
+            state.completeCurrentStep()
+            state.isFinished = true
+            replacePlaceholder(placeholderId: state.id, realSessionId: response.sessionId)
+        } catch {
+            state.fail(at: .launchingAgent, message: error.localizedDescription)
+            handleCreationFailure(state: state, removeDiscoveredFolder: false)
+        }
+    }
+
+    /// Swaps a placeholder session for the real session once it arrives.
+    private func replacePlaceholder(placeholderId: String, realSessionId: String) {
+        sessions.removeAll { $0.id == placeholderId }
+        if selectedSessionId == placeholderId {
+            selectedSessionId = realSessionId
+        }
+        activeCreations.removeValue(forKey: placeholderId)
+        reconcileOrder()
+    }
+
+    /// Cleans up after a failed creation attempt.
+    private func handleCreationFailure(state: WorktreeCreationState, removeDiscoveredFolder: Bool) {
+        sessions.removeAll { $0.id == state.id }
+        if removeDiscoveredFolder {
+            discoveredFolders.remove(state.worktreePath)
+            saveDiscoveredFolders()
+        }
+        if selectedSessionId == state.id {
+            selectedSessionId = nil
+        }
+        activeCreations.removeValue(forKey: state.id)
+        reconcileOrder()
+
+        // Show error alert
+        let alert = NSAlert()
+        alert.messageText = "Worktree Creation Failed"
+        alert.informativeText = state.error ?? "An unknown error occurred."
+        alert.alertStyle = .critical
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
     }
 
     // MARK: - REST Fallback

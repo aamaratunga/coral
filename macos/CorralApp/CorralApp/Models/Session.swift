@@ -68,8 +68,61 @@ struct Session: Identifiable, Equatable {
     var boardUnread: Int
     var commands: [SessionCommand]
     var logPath: String
+    var isPlaceholder: Bool = false
 
     var id: String { sessionId.isEmpty ? name : sessionId }
+
+    /// Memberwise initializer for programmatic creation (e.g. placeholders, tests).
+    init(
+        name: String,
+        agentType: String = "claude",
+        sessionId: String = "",
+        tmuxSession: String = "",
+        status: String? = nil,
+        summary: String? = nil,
+        stalenessSeconds: Double? = nil,
+        branch: String? = nil,
+        displayName: String? = nil,
+        icon: String? = nil,
+        workingDirectory: String = "",
+        waitingForInput: Bool = false,
+        done: Bool = false,
+        working: Bool = false,
+        stuck: Bool = false,
+        waitingReason: String? = nil,
+        waitingSummary: String? = nil,
+        changedFileCount: Int = 0,
+        boardProject: String? = nil,
+        boardJobTitle: String? = nil,
+        boardUnread: Int = 0,
+        commands: [SessionCommand] = [],
+        logPath: String = ""
+    ) {
+        self.name = name
+        self.agentType = agentType
+        self.sessionId = sessionId
+        self.tmuxSession = tmuxSession
+        self.status = status
+        self.summary = summary
+        self.stalenessSeconds = stalenessSeconds
+        self.branch = branch
+        self.displayName = displayName
+        self.icon = icon
+        self.workingDirectory = workingDirectory
+        self.waitingForInput = waitingForInput
+        self.done = done
+        self.working = working
+        self.stuck = stuck
+        self.waitingReason = waitingReason
+        self.waitingSummary = waitingSummary
+        self.changedFileCount = changedFileCount
+        self.boardProject = boardProject
+        self.boardJobTitle = boardJobTitle
+        self.boardUnread = boardUnread
+        self.commands = commands
+        self.logPath = logPath
+        self.isPlaceholder = false
+    }
 
     /// The label to show in the sidebar (matches web app fallback chain).
     var displayLabel: String {
@@ -138,5 +191,6 @@ extension Session: Decodable {
         boardUnread = try c.decodeIfPresent(Int.self, forKey: .boardUnread) ?? 0
         commands = try c.decodeIfPresent([SessionCommand].self, forKey: .commands) ?? []
         logPath = try c.decodeIfPresent(String.self, forKey: .logPath) ?? ""
+        isPlaceholder = false
     }
 }
