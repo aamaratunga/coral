@@ -728,8 +728,10 @@ async def restart_session(
             board_type=stored_board_type,
         )
 
+        # Leading space prevents the command from being recorded in
+        # shell history (HIST_IGNORE_SPACE, enabled by default in zsh).
         rc, _, stderr = await run_cmd(
-            "tmux", "send-keys", "-t", target, "-l", cmd
+            "tmux", "send-keys", "-t", target, "-l", " " + cmd
         )
         if rc != 0:
             return {"error": f"re-launch failed: {stderr}"}
@@ -874,8 +876,10 @@ async def launch_claude_session(working_dir: str, agent_type: str = "claude", di
                 board_type=board_type,
             )
 
+            # Leading space prevents the command from being recorded in
+            # shell history (HIST_IGNORE_SPACE, enabled by default in zsh).
             await asyncio.create_subprocess_exec(
-                "tmux", "send-keys", "-t", f"{session_name}.0", cmd, "Enter"
+                "tmux", "send-keys", "-t", f"{session_name}.0", " " + cmd, "Enter"
             )
 
         # Store display_name and register live session

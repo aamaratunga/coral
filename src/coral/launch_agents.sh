@@ -125,17 +125,15 @@ if [ "$LAUNCH_AGENTS" = "agents" ]; then
         # Create a new detached session rooted in the worktree
         tmux new-session -d -s "$session_name" -c "$dir"
         tmux set-environment -t "$session_name" -r CLAUDECODE
-
         # Stream stdout to log file
         tmux pipe-pane -t "${session_name}" -o "cat >> '${log_file}'"
-
-        # Pane 0: agent (with PROTOCOL.md piped in as system prompt if available)
-        # Pane title is set via tmux directly (no shell printf noise)
         if [ "$AGENT_TYPE" == "gemini" ]; then
             if [ -f "$PROTOCOL_PATH" ]; then
-                tmux send-keys -t "${session_name}.0" "GEMINI_SYSTEM_MD=\"${PROTOCOL_PATH}\" gemini" Enter
+                # Leading space prevents the command from being recorded in
+                # shell history (HIST_IGNORE_SPACE, enabled by default in zsh).
+                tmux send-keys -t "${session_name}.0" " GEMINI_SYSTEM_MD=\"${PROTOCOL_PATH}\" gemini" Enter
             else
-                tmux send-keys -t "${session_name}.0" "gemini" Enter
+                tmux send-keys -t "${session_name}.0" " gemini" Enter
             fi
         else
             # Build merged settings file (hooks + system prompt) via Python helper
@@ -155,7 +153,7 @@ with open('${settings_file}', 'w') as f:
     json.dump(merged, f, indent=2)
     f.write('\n')
 "
-            tmux send-keys -t "${session_name}.0" "env -u CLAUDECODE claude --session-id ${session_id} --settings ${settings_file}" Enter
+            tmux send-keys -t "${session_name}.0" " env -u CLAUDECODE claude --session-id ${session_id} --settings ${settings_file}" Enter
         fi
 
 
