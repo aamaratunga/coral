@@ -175,20 +175,32 @@ LinearGradient(
 .blur(radius: 2)
 ```
 
-### Selected Session Row
-Gradient background fill from coral glow to transparent, with a gradient accent bar on the left edge that has its own glow:
-```swift
-// Background
-LinearGradient(
-    colors: [coralPrimary.opacity(0.18), coralPrimary.opacity(0.06)],
-    startPoint: .leading,
-    endPoint: .trailing
-)
+### Sidebar Row Visual Hierarchy
+Status backgrounds are reserved for actionable states. Non-actionable states stay quiet.
 
-// Left accent bar
-coralGradient
+**Actionable states** (full gradient background + left accent bar):
+- **Waiting for input** (amber 0.18→0.04): user must act
+- **Stuck** (red 0.18→0.04): user must act
+- **Done** (green 0.18→0.04): user should review
+
+**Non-actionable states** (no background, dot only):
+- **Working**: teal status dot with pulsing glow is sufficient. No background gradient, no accent bar.
+- **Idle**: gray dot, no background.
+
+**Selected row** (coral outline, independent of status):
+Selection uses a border/outline instead of a background fill. This keeps selection and status as independent visual channels — you can always tell both what state a session is in AND which one is selected.
+```swift
+// Selection outline — layers over any status background
+RoundedRectangle(cornerRadius: 8)
+    .strokeBorder(coralPrimary.opacity(0.5), lineWidth: 1.5)
+```
+
+**Left accent bar** — only shown for actionable states:
+```swift
+// Accent bar with glow (amber, red, or green)
+statusColor.gradient
     .frame(width: 3)
-    .shadow(color: coralPrimary.opacity(0.4), radius: 4)
+    .shadow(color: statusColor.opacity(0.4), radius: 4)
 ```
 
 ### Primary Buttons
@@ -218,3 +230,4 @@ static let terminalNSCaret = NSColor(red: 1.0, green: 0.42, blue: 0.32, alpha: 1
 | 2026-03-28 | Vibrancy materials for sidebar | `.ultraThinMaterial` with blur(30px) creates depth, says "native macOS app" not "web wrapper" |
 | 2026-03-28 | Glowing status dots | Colored shadows on status dots make agent state visible at peripheral vision distance |
 | 2026-03-28 | Ambient sidebar glow | Breathing coral gradient when agents are active — the app feels alive |
+| 2026-03-28 | Quiet working rows, outline selection | Working state gets no background (dot is enough). Selection uses coral outline instead of background fill — independent visual channels for status vs navigation. Only actionable states (waiting/stuck/done) get colored backgrounds + accent bars. |
