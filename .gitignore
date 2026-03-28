@@ -16,3 +16,4 @@ macos/CoralApp/xcuserdata/
 macos/CoralApp/CoralApp.xcodeproj/xcuserdata/
 *.xcuserstate
 .xcodebuildmcp/
+.gstack/

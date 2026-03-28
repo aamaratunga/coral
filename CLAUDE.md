@@ -127,6 +127,12 @@ for the full workflow.
 - **Logs:** Agents stream output to `/tmp/<agent_type>_coral_<folder_name>.log` via `tmux pipe-pane`.
 - **Entry Points:** `coral` / `coral-dashboard` (web server), `launch-coral` (agent launcher), `coral-hook-task-sync` (task sync hook), `coral-hook-agentic-state` (agentic state hook), `coral-board` (message board CLI).
 
+## Design System
+Always read DESIGN.md before making any visual or UI decisions for the macOS app.
+All font choices, colors, spacing, and aesthetic direction are defined there.
+Do not deviate without explicit user approval.
+In QA mode, flag any code that doesn't match DESIGN.md.
+
 ## Documentation
 - Documentation uses MkDocs with Material theme, configured in `docs/mkdocs.yml`.
 - Local preview: `cd docs && mkdocs serve`
