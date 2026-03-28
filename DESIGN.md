@@ -16,7 +16,7 @@
 - **Display/Hero:** SF Pro Display (system) — macOS native, don't fight the platform
 - **Body/UI:** SF Pro Text (system) — `.headline` for session names, `.callout` for status, `.caption` for metadata
 - **Data/Tables:** SF Pro with tabular-nums for counts, metrics
-- **Code/Terminal:** JetBrains Mono (preferred) or Geist Mono, via SwiftTerm — consider offering as user preference
+- **Code/Terminal:** JetBrains Mono (preferred) → MesloLGS Nerd Font Mono (Nerd Font icon glyphs) → system monospace, via SwiftTerm — consider offering as user preference
 - **Loading:** System fonts, zero load time (native advantage)
 - **Scale:** Follow Apple HIG dynamic type sizes. Key mappings:
   - `.largeTitle` (34pt) — Loading screen app name
@@ -145,8 +145,7 @@ RadialGradient(
 - **Easing:** enter(easeOut) exit(easeIn) move(easeInOut)
 - **Duration:** micro(50-100ms) short(150-250ms) medium(250-400ms) long(400-700ms)
 - **Key animations:**
-  - Status dot: coral glow pulse (2s easeInOut infinite) for working state
-  - Working row: subtle background pulse (3s easeInOut infinite, 0.04 to 0.08 opacity)
+  - Status dot: teal glow pulse (2s easeInOut infinite) for working state
   - Sidebar ambient glow: breathing (4s easeInOut infinite)
   - Accent divider: static gradient (no animation — the divider itself is the accent)
   - Terminal cursor: coral-colored blink (1.2s step-end)
@@ -231,3 +230,7 @@ static let terminalNSCaret = NSColor(red: 1.0, green: 0.42, blue: 0.32, alpha: 1
 | 2026-03-28 | Glowing status dots | Colored shadows on status dots make agent state visible at peripheral vision distance |
 | 2026-03-28 | Ambient sidebar glow | Breathing coral gradient when agents are active — the app feels alive |
 | 2026-03-28 | Quiet working rows, outline selection | Working state gets no background (dot is enough). Selection uses coral outline instead of background fill — independent visual channels for status vs navigation. Only actionable states (waiting/stuck/done) get colored backgrounds + accent bars. |
+| 2026-03-28 | Sidebar vibrancy material added | Sidebar background changed from opaque bgSurface to semi-transparent (0.75) + .ultraThinMaterial. Matches DESIGN.md spec for native macOS depth. |
+| 2026-03-28 | Terminal font fallback chain fixed | JetBrains Mono (preferred) → MesloLGS Nerd Font Mono → system monospace. Matches DESIGN.md spec while keeping Nerd Font icon support. |
+| 2026-03-28 | Detail header padding corrected | Changed from 12h/8v to 16h/10v per DESIGN.md spec. |
+| 2026-03-28 | Removed stale working row animation from Motion section | Motion section referenced a working row background pulse that was explicitly removed in the sidebar design decisions. Cleaned up the contradiction. |
