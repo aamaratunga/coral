@@ -1513,11 +1513,39 @@ async def ws_coral(websocket: WebSocket):
     prev_sessions: dict[str, str] = {}  # session key -> json string
     prev_runs_json: str = "[]"
     first_message = True
+    # Grace period: when tmux returns empty but we previously had sessions,
+    # use the last known good results for a few poll cycles to avoid
+    # broadcasting spurious "remove all" diffs on transient tmux failures.
+    _last_good_results: list[dict] = []
+    _empty_streak: int = 0
+    _GRACE_CYCLES: int = 3  # number of consecutive empty polls before accepting
 
     try:
         while True:
             results = await _build_session_list()
             results = await _exclude_job_sessions(results)
+
+            # Grace period: if results are suddenly empty but we had sessions,
+            # use cached results to ride out transient tmux failures.
+            if not results and _last_good_results:
+                _empty_streak += 1
+                if _empty_streak <= _GRACE_CYCLES:
+                    log.warning(
+                        "Empty session list (streak %d/%d) — using cached state",
+                        _empty_streak, _GRACE_CYCLES,
+                    )
+                    results = _last_good_results
+                else:
+                    log.warning(
+                        "Empty session list persists after %d cycles — accepting",
+                        _empty_streak,
+                    )
+            else:
+                if _empty_streak > 0:
+                    log.info("Session list recovered after %d empty cycles", _empty_streak)
+                _empty_streak = 0
+                if results:
+                    _last_good_results = results
 
             # Fetch active job runs for Jobs sidebar
             active_runs = []
