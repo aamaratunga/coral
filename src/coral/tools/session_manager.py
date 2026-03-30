@@ -15,6 +15,18 @@ import json as _json_mod
 
 from coral.tools.utils import run_cmd, LOG_DIR, LOG_PATTERN, get_package_dir
 
+
+def _cleanup_temp_files(session_id: str) -> None:
+    """Remove temp files (settings + prompt) for a session, if they exist."""
+    for pattern in (
+        f"/tmp/coral_settings_{session_id}.json",
+        f"/tmp/coral_prompt_{session_id}.txt",
+    ):
+        try:
+            Path(pattern).unlink(missing_ok=True)
+        except OSError:
+            pass
+
 ANSI_RE = re.compile(
     r"\x1B(?:"
     r"\][^\x07\x1B]*(?:\x07|\x1B\\)?"   # OSC sequences (ESC ] ... BEL/ST) — must be before Fe
@@ -407,6 +419,13 @@ async def _resume_single_session(store, rec, log) -> None:
         log.info("Skipping sleeping session %s (%s)", sid[:8], agent_type)
         return
 
+    # Terminal sessions have no transcript/context to resume — mark
+    # them as sleeping so the user can decide whether to relaunch.
+    if agent_type == "terminal":
+        log.info("Skipping terminal session %s (terminals don't auto-resume)", sid[:8])
+        await store.set_session_sleeping(sid, sleeping=True)
+        return
+
     # Use resume_from_id if available (tracks the original Claude
     # session across multiple Coral restarts), otherwise fall back
     # to the session_id itself (first restart after initial launch).
@@ -445,12 +464,14 @@ async def _resume_single_session(store, rec, log) -> None:
 
     if result.get("error"):
         log.warning("Failed to resume session %s: %s", sid[:8], result["error"])
+        _cleanup_temp_files(sid)
         await store.unregister_live_session(sid)
     else:
         new_session_id = result["session_id"]
         new_session_name = result["session_name"]
         # Old session record is replaced by the new launch
         # (launch_claude_session calls register_live_session with new id)
+        _cleanup_temp_files(sid)
         await store.unregister_live_session(sid)
 
         # Re-subscribe to message board, carrying forward the read cursor
@@ -520,6 +541,7 @@ async def resume_persistent_sessions(store, schedule_store=None) -> None:
 
             if rec.get("is_job") or sid in job_session_ids:
                 # Job run session — don't resume, just clean up the record
+                _cleanup_temp_files(sid)
                 await store.unregister_live_session(sid)
                 log.info("Skipping job session %s (not resumable)", sid[:8])
                 continue
@@ -527,6 +549,7 @@ async def resume_persistent_sessions(store, schedule_store=None) -> None:
             working_dir = rec["working_dir"]
             if not os.path.isdir(working_dir):
                 # Working directory gone (worktree removed?) — clean up
+                _cleanup_temp_files(sid)
                 await store.unregister_live_session(sid)
                 log.info("Removed stale live session %s (dir missing: %s)", sid[:8], working_dir)
                 continue
@@ -547,18 +570,39 @@ async def resume_persistent_sessions(store, schedule_store=None) -> None:
             except asyncio.TimeoutError:
                 log.warning("Timed out resuming session %s after %ds", sid[:8], _RESUME_TIMEOUT)
                 try:
+                    _cleanup_temp_files(sid)
                     await store.unregister_live_session(sid)
                 except Exception:
                     pass
             except Exception:
                 log.exception("Error resuming session %s", sid[:8])
                 try:
+                    _cleanup_temp_files(sid)
                     await store.unregister_live_session(sid)
                 except Exception:
                     pass
 
         log.info("Resuming %d sessions concurrently", len(to_resume))
         await asyncio.gather(*[_safe_resume(rec) for rec in to_resume])
+
+        # Clean up orphaned temp files from previous runs.
+        # Compare against live tmux sessions only — DB records may be stale.
+        import glob as _glob_mod
+        live_now = await discover_coral_agents()
+        live_now_ids = {a["session_id"] for a in live_now}
+        for pattern, prefix, suffix in (
+            ("/tmp/coral_settings_*.json", "coral_settings_", ".json"),
+            ("/tmp/coral_prompt_*.txt", "coral_prompt_", ".txt"),
+        ):
+            for fpath in _glob_mod.glob(pattern):
+                fname = os.path.basename(fpath)
+                file_id = fname.replace(prefix, "").replace(suffix, "")
+                if file_id not in live_now_ids:
+                    try:
+                        os.unlink(fpath)
+                        log.info("Removed orphaned temp file: %s", fname)
+                    except OSError:
+                        pass
     except Exception:
         log.exception("Error resuming persistent sessions")
 
@@ -688,6 +732,10 @@ async def restart_session(
                     stored_board_type = _flag_row["board_type"]
             except Exception:
                 pass
+
+        # Clean up old temp files before creating new ones
+        if session_id:
+            _cleanup_temp_files(session_id)
 
         # 7. Re-launch the agent with the same system prompt
         protocol_path = get_package_dir() / "PROTOCOL.md"

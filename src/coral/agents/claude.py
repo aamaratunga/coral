@@ -219,7 +219,7 @@ class ClaudeAgent(BaseAgent):
             merged["systemPrompt"] = "\n\n".join(sys_parts)
         # Write to temp file to avoid shell escaping issues.
         # Use os.open with 0o600 to atomically create with restricted permissions.
-        settings_file = Path(f"/tmp/coral_settings_{effective_id}.json")
+        settings_file = Path(f"/tmp/coral_settings_{session_id}.json")
         fd = os.open(settings_file, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
         with os.fdopen(fd, "w") as f:
             f.write(json.dumps(merged, indent=2) + "\n")
@@ -242,7 +242,7 @@ class ClaudeAgent(BaseAgent):
             action_text = template.replace("{board_name}", board_name).replace("coral-board", cli)
             cli_prompt = f"{cli_prompt}\n\n{action_text}" if cli_prompt else action_text
         if cli_prompt:
-            prompt_file = Path(f"/tmp/coral_prompt_{effective_id}.txt")
+            prompt_file = Path(f"/tmp/coral_prompt_{session_id}.txt")
             fd = os.open(prompt_file, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
             with os.fdopen(fd, "w") as f:
                 f.write(cli_prompt)
