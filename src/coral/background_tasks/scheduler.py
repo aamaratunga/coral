@@ -10,7 +10,7 @@ from zoneinfo import ZoneInfo
 
 from coral.store.schedule import ScheduleStore
 from coral.tools.cron_parser import next_fire_time
-from coral.tools.utils import run_cmd
+from coral.tools.utils import run_cmd, run_cmd_with_retry
 
 log = logging.getLogger(__name__)
 
@@ -234,7 +234,7 @@ class JobScheduler:
             base_branch = config.get("base_branch", "main")
             worktree_dir = f"{repo_path}_task_run_{run_id}"
             try:
-                rc, _, stderr = await run_cmd(
+                rc, _, stderr = await run_cmd_with_retry(
                     "git", "-C", repo_path, "worktree", "add",
                     worktree_dir, base_branch, timeout=30.0,
                 )
@@ -451,7 +451,7 @@ class JobScheduler:
     async def _cleanup_worktree(self, repo_path: str, worktree_path: str) -> None:
         """Remove a git worktree."""
         try:
-            rc, _, stderr = await run_cmd(
+            rc, _, stderr = await run_cmd_with_retry(
                 "git", "-C", repo_path, "worktree", "remove", "--force",
                 worktree_path, timeout=30.0,
             )
