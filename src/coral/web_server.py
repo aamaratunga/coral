@@ -75,7 +75,7 @@ async def _compact_databases() -> None:
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Start background indexer, batch summarizer, git poller, and webhook dispatcher on server startup."""
-    from coral.background_tasks import SessionIndexer, BatchSummarizer, GitPoller, WebhookDispatcher, IdleDetector, MessageBoardNotifier
+    from coral.background_tasks import SessionIndexer, BatchSummarizer, GitPoller, WebhookDispatcher, IdleDetector, MessageBoardNotifier, LiveSummaryGenerator
     from coral.background_tasks.remote_board_poller import RemoteBoardPoller
     from coral.store.remote_boards import RemoteBoardStore
     from coral.tools.session_manager import discover_coral_agents, resume_persistent_sessions
@@ -133,6 +133,7 @@ async def lifespan(app: FastAPI):
     git_poller = GitPoller(store)
     dispatcher = WebhookDispatcher(store)
     idle_detector = IdleDetector(store)
+    live_namer = LiveSummaryGenerator(store)
 
     from coral.store.registry import get_board_store, set_store, set_board_store
     set_store(store)
@@ -145,7 +146,7 @@ async def lifespan(app: FastAPI):
         INDEXER_INTERVAL_S, INDEXER_STARTUP_DELAY_S,
         GIT_POLLER_INTERVAL_S, WEBHOOK_DISPATCHER_INTERVAL_S,
         IDLE_DETECTOR_INTERVAL_S, BOARD_NOTIFIER_INTERVAL_S,
-        REMOTE_POLLER_INTERVAL_S,
+        REMOTE_POLLER_INTERVAL_S, LIVE_SUMMARY_INTERVAL_S,
     )
 
     indexer_task = asyncio.create_task(indexer.run_forever(interval=INDEXER_INTERVAL_S, startup_delay=INDEXER_STARTUP_DELAY_S))
@@ -154,6 +155,7 @@ async def lifespan(app: FastAPI):
     webhook_task = asyncio.create_task(dispatcher.run_forever(interval=WEBHOOK_DISPATCHER_INTERVAL_S))
     idle_task = asyncio.create_task(idle_detector.run_forever(interval=IDLE_DETECTOR_INTERVAL_S))
     board_notifier_task = asyncio.create_task(board_notifier.run_forever(interval=BOARD_NOTIFIER_INTERVAL_S))
+    live_namer_task = asyncio.create_task(live_namer.run_forever(interval=LIVE_SUMMARY_INTERVAL_S))
 
     remote_board_store = RemoteBoardStore()
     board_remotes_api.store = remote_board_store
@@ -210,6 +212,7 @@ async def lifespan(app: FastAPI):
     webhook_task.cancel()
     idle_task.cancel()
     board_notifier_task.cancel()
+    live_namer_task.cancel()
     remote_poller_task.cancel()
     try:
         await asyncio.wait_for(remote_poller.close(), timeout=5)

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 import os
 import subprocess
 from pathlib import Path
@@ -110,7 +111,6 @@ async def run_cmd_with_retry(
     base_delay: float = 1.0,
 ) -> Tuple[int, str, str]:
     """Like run_cmd but retries on git index lock errors with exponential backoff."""
-    import logging
     _log = logging.getLogger(__name__)
 
     for attempt in range(max_retries + 1):

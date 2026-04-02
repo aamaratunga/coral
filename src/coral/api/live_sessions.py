@@ -135,11 +135,12 @@ async def _build_session_list(include_commands: bool = False) -> list[dict]:
             pass
         return live_board_names, live_sleeping
 
-    (display_names, icons, latest_events, latest_goals, _live_board_result) = await asyncio.gather(
+    (display_names, icons, latest_events, latest_goals, auto_names, _live_board_result) = await asyncio.gather(
         store.get_display_names(session_ids),
         store.get_icons(session_ids),
         store.get_latest_event_types(session_ids),
         store.get_latest_goals(session_ids),
+        store.get_auto_names(session_ids),
         _fetch_live_board_data(),
     )
 
@@ -197,6 +198,8 @@ async def _build_session_list(include_commands: bool = False) -> list[dict]:
         summary = log_info["summary"]
         if not summary and sid:
             summary = latest_goals.get(sid)
+        if not summary and sid:
+            summary = auto_names.get(sid)
 
         tmux_name = agent.get("tmux_session") or ""
         board_sub = board_subs.get(tmux_name)
@@ -231,6 +234,7 @@ async def _build_session_list(include_commands: bool = False) -> list[dict]:
             "board_job_title": board_job_title,
             "board_unread": board_unread,
             "sleeping": live_sleeping.get(sid, False) if sid else False,
+            "latest_event_summary": ev_summary if latest_ev != "acknowledge" else None,
         }
         if include_commands:
             wd = agent.get("working_directory", "")
@@ -282,6 +286,7 @@ async def _build_session_list(include_commands: bool = False) -> list[dict]:
                 "board_job_title": sess.get("display_name"),
                 "board_unread": 0,
                 "sleeping": True,
+                "latest_event_summary": None,
                 "log_path": "",
             })
     except Exception:
