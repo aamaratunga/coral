@@ -313,6 +313,7 @@ class DatabaseManager:
             ("live_sessions", "icon", "TEXT"),
             ("live_sessions", "is_sleeping", "INTEGER NOT NULL DEFAULT 0"),
             ("live_sessions", "board_type", "TEXT"),
+            ("live_sessions", "auto_name", "TEXT"),
             ("scheduled_jobs", "flags", "TEXT DEFAULT ''"),
             ("scheduled_runs", "trigger_type", "TEXT DEFAULT 'cron'"),
             ("scheduled_runs", "webhook_url", "TEXT"),

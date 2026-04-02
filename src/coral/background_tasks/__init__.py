@@ -13,6 +13,7 @@ from coral.background_tasks.webhook_dispatcher import WebhookDispatcher
 from coral.background_tasks.idle_detector import IdleDetector
 from coral.background_tasks.board_notifier import MessageBoardNotifier
 from coral.background_tasks.remote_board_poller import RemoteBoardPoller
+from coral.background_tasks.live_summary_generator import LiveSummaryGenerator
 __all__ = ["SessionIndexer", "BatchSummarizer", "GitPoller", "AutoSummarizer",
            "JobScheduler", "WebhookDispatcher", "IdleDetector", "MessageBoardNotifier",
-           "RemoteBoardPoller"]
+           "RemoteBoardPoller", "LiveSummaryGenerator"]

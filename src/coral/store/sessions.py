@@ -202,6 +202,61 @@ class SessionStore(DatabaseManager):
         )).fetchall()
         return {r["session_id"]: r["display_name"] for r in rows}
 
+    async def get_auto_names(self, session_ids: list[str]) -> dict[str, str]:
+        """Batch fetch auto_name from live_sessions for given session IDs."""
+        if not session_ids:
+            return {}
+        conn = await self._get_conn()
+        placeholders = ",".join("?" for _ in session_ids)
+        rows = await (await conn.execute(
+            f"SELECT session_id, auto_name FROM live_sessions "
+            f"WHERE session_id IN ({placeholders}) AND auto_name IS NOT NULL AND auto_name != ''",
+            session_ids,
+        )).fetchall()
+        return {r["session_id"]: r["auto_name"] for r in rows}
+
+    async def set_auto_name(self, session_id: str, auto_name: str) -> None:
+        """Write auto_name for one live session."""
+        conn = await self._get_conn()
+        await conn.execute(
+            "UPDATE live_sessions SET auto_name = ? WHERE session_id = ?",
+            (auto_name, session_id),
+        )
+        await conn.commit()
+
+    async def get_sessions_needing_auto_name(self, limit: int = 2) -> list[str]:
+        """Return session IDs eligible for auto-naming.
+
+        Candidates have no auto_name, 5+ tool_use events, no goal event,
+        and the 5th event is at least 30s old (debounce).
+        """
+        conn = await self._get_conn()
+        rows = await (await conn.execute("""
+            SELECT ls.session_id
+            FROM live_sessions ls
+            WHERE ls.auto_name IS NULL
+              AND (SELECT COUNT(*) FROM agent_events ae
+                   WHERE ae.session_id = ls.session_id AND ae.event_type = 'tool_use') >= 5
+              AND NOT EXISTS (SELECT 1 FROM agent_events ae2
+                   WHERE ae2.session_id = ls.session_id AND ae2.event_type = 'goal')
+              AND (SELECT created_at FROM agent_events ae3
+                   WHERE ae3.session_id = ls.session_id AND ae3.event_type = 'tool_use'
+                   ORDER BY ae3.created_at ASC LIMIT 1 OFFSET 4) <= datetime('now', '-30 seconds')
+            LIMIT ?
+        """, (limit,))).fetchall()
+        return [r["session_id"] for r in rows]
+
+    async def get_event_summaries(self, session_id: str, limit: int = 10) -> list[str]:
+        """Return recent event summaries for a session (tool_use and prompt_submit)."""
+        conn = await self._get_conn()
+        rows = await (await conn.execute(
+            "SELECT summary FROM agent_events "
+            "WHERE session_id = ? AND event_type IN ('tool_use', 'prompt_submit') "
+            "ORDER BY created_at DESC LIMIT ?",
+            (session_id, limit),
+        )).fetchall()
+        return [r["summary"] for r in rows if r["summary"]]
+
     async def migrate_display_name(self, old_session_id: str, new_session_id: str) -> None:
         name = await self.get_display_name(old_session_id)
         if name:
@@ -651,7 +706,7 @@ class SessionStore(DatabaseManager):
         now = datetime.now(timezone.utc).isoformat()
         # Carry forward flags, prompt, board_name, board_server, board_type, and is_sleeping from old session
         old_row = await (await conn.execute(
-            "SELECT flags, prompt, board_name, board_server, icon, is_sleeping, board_type FROM live_sessions WHERE session_id = ?", (old_session_id,)
+            "SELECT flags, prompt, board_name, board_server, icon, is_sleeping, board_type, auto_name FROM live_sessions WHERE session_id = ?", (old_session_id,)
         )).fetchone()
         if flags is None:
             flags_json = old_row["flags"] if old_row and old_row["flags"] else None
@@ -663,12 +718,13 @@ class SessionStore(DatabaseManager):
         old_icon = old_row["icon"] if old_row and "icon" in old_row.keys() else None
         old_sleeping = old_row["is_sleeping"] if old_row else 0
         old_board_type = old_row["board_type"] if old_row and "board_type" in old_row.keys() else None
+        old_auto_name = old_row["auto_name"] if old_row and "auto_name" in old_row.keys() else None
         await conn.execute("DELETE FROM live_sessions WHERE session_id = ?", (old_session_id,))
         await conn.execute(
             "INSERT OR REPLACE INTO live_sessions "
-            "(session_id, agent_type, agent_name, working_dir, display_name, resume_from_id, flags, prompt, board_name, board_server, icon, is_sleeping, board_type, created_at) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            (new_session_id, agent_type, agent_name, working_dir, display_name, resume_from_id, flags_json, old_prompt, old_board, old_board_server, old_icon, old_sleeping, old_board_type, now),
+            "(session_id, agent_type, agent_name, working_dir, display_name, resume_from_id, flags, prompt, board_name, board_server, icon, is_sleeping, board_type, auto_name, created_at) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (new_session_id, agent_type, agent_name, working_dir, display_name, resume_from_id, flags_json, old_prompt, old_board, old_board_server, old_icon, old_sleeping, old_board_type, old_auto_name, now),
         )
         await conn.commit()
 

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 import os
 import subprocess
 from pathlib import Path
@@ -19,6 +20,12 @@ _EXTRA_PATHS = ["/opt/homebrew/bin", "/usr/local/bin", "/opt/local/bin"]
 for _p in _EXTRA_PATHS:
     if _p not in os.environ.get("PATH", "") and os.path.isdir(_p):
         os.environ["PATH"] = _p + ":" + os.environ.get("PATH", "")
+
+# Prevent git from acquiring optional index locks during read-only operations
+# (e.g. git status refreshing stat cache). The Coral server polls git state every
+# 30s across all agent worktrees; without this, those reads contend with agents
+# running git add/commit in the same directories.
+os.environ["GIT_OPTIONAL_LOCKS"] = "0"
 
 
 def get_package_dir() -> Path:
@@ -92,3 +99,31 @@ async def run_cmd(*args: str, timeout: float | None = None) -> Tuple[int, str, s
         return -1, "", "Command timed out"
     except Exception as e:
         return -1, "", str(e)
+
+
+_GIT_LOCK_ERRORS = ("index.lock", "Unable to create", "lock file")
+
+
+async def run_cmd_with_retry(
+    *args: str,
+    timeout: float | None = None,
+    max_retries: int = 3,
+    base_delay: float = 1.0,
+) -> Tuple[int, str, str]:
+    """Like run_cmd but retries on git index lock errors with exponential backoff."""
+    _log = logging.getLogger(__name__)
+
+    for attempt in range(max_retries + 1):
+        rc, stdout, stderr = await run_cmd(*args, timeout=timeout)
+        if rc == 0:
+            return rc, stdout, stderr
+        if not any(e in stderr for e in _GIT_LOCK_ERRORS):
+            return rc, stdout, stderr
+        if attempt < max_retries:
+            delay = base_delay * (2 ** attempt)
+            _log.warning(
+                "Git lock contention (attempt %d/%d), retrying in %.1fs: %s",
+                attempt + 1, max_retries + 1, delay, stderr,
+            )
+            await asyncio.sleep(delay)
+    return rc, stdout, stderr

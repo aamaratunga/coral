@@ -32,6 +32,7 @@ WEBHOOK_DISPATCHER_INTERVAL_S = 15 # Webhook delivery retry interval
 IDLE_DETECTOR_INTERVAL_S = 60      # Idle agent detection interval
 BOARD_NOTIFIER_INTERVAL_S = 5      # Message board notification interval
 REMOTE_POLLER_INTERVAL_S = 5       # Remote board polling interval
+LIVE_SUMMARY_INTERVAL_S = 30       # Live auto-naming check interval
 WAL_CHECKPOINT_INTERVAL_S = 300    # Periodic WAL checkpoint (5 minutes)
 # ── WebSocket ────────────────────────────────────────────────────────────
 WS_POLL_INTERVAL_S = 2            # Dashboard WebSocket refresh interval
